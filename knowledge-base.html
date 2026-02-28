@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>我的知識庫</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #fafaf8;
+    --surface: #ffffff;
+    --border: #e8e6e0;
+    --text: #1a1a18;
+    --muted: #888880;
+    --accent: #2d6a4f;
+    --accent-light: #e8f5ee;
+    --tag-colors: #f0ede8;
+    --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
+  }
+
+  body {
+    font-family: 'Noto Serif TC', serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    font-size: 16px;
+    line-height: 1.7;
+  }
+
+  /* Layout */
+  .app { display: flex; height: 100vh; overflow: hidden; }
+
+  /* Sidebar */
+  .sidebar {
+    width: 260px;
+    min-width: 260px;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    overflow-y: auto;
+  }
+
+  .sidebar-header {
+    padding: 28px 24px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .sidebar-header h1 {
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--text);
+  }
+
+  .sidebar-header p {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 4px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .sidebar-section {
+    padding: 20px 16px 8px;
+  }
+
+  .sidebar-label {
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 0 8px;
+    margin-bottom: 6px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .cat-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 9px 12px;
+    border: none;
+    background: transparent;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Noto Serif TC', serif;
+    font-size: 14px;
+    color: var(--text);
+    text-align: left;
+    transition: background 0.15s;
+  }
+
+  .cat-btn:hover { background: var(--bg); }
+  .cat-btn.active { background: var(--accent-light); color: var(--accent); font-weight: 600; }
+
+  .cat-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .cat-count {
+    margin-left: auto;
+    font-size: 11px;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+  }
+
+  .add-btn {
+    margin: 16px;
+    padding: 11px;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-family: 'Noto Serif TC', serif;
+    font-size: 14px;
+    cursor: pointer;
+    transition: opacity 0.15s;
+    letter-spacing: 0.03em;
+  }
+
+  .add-btn:hover { opacity: 0.88; }
+
+  /* Main */
+  .main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .topbar {
+    padding: 20px 32px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .search-wrap {
+    flex: 1;
+    position: relative;
+  }
+
+  .search-wrap input {
+    width: 100%;
+    padding: 10px 16px 10px 38px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--bg);
+    font-family: 'Noto Serif TC', serif;
+    font-size: 14px;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.15s;
+  }
+
+  .search-wrap input:focus { border-color: var(--accent); }
+
+  .search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted);
+    font-size: 15px;
+  }
+
+  .view-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  /* Cards Grid */
+  .content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 28px 32px;
+  }
+
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    cursor: pointer;
+    transition: box-shadow 0.2s, transform 0.15s;
+    position: relative;
+  }
+
+  .card:hover {
+    box-shadow: var(--shadow);
+    transform: translateY(-2px);
+  }
+
+  .card-cat {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    margin-bottom: 10px;
+  }
+
+  .card-title {
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.4;
+    margin-bottom: 8px;
+    color: var(--text);
+  }
+
+  .card-preview {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .card-date {
+    margin-top: 14px;
+    font-size: 11px;
+    color: #b8b5af;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 80px 20px;
+    color: var(--muted);
+  }
+
+  .empty-state .emoji { font-size: 48px; margin-bottom: 16px; }
+  .empty-state p { font-size: 15px; }
+
+  /* Modal */
+  .overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.3);
+    backdrop-filter: blur(4px);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+  }
+
+  .overlay.open { opacity: 1; pointer-events: all; }
+
+  .modal {
+    background: var(--surface);
+    border-radius: 16px;
+    width: 100%;
+    max-width: 620px;
+    max-height: 85vh;
+    overflow-y: auto;
+    padding: 32px;
+    transform: translateY(16px);
+    transition: transform 0.2s;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.12);
+  }
+
+  .overlay.open .modal { transform: translateY(0); }
+
+  .modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+  }
+
+  .modal-header h2 { font-size: 18px; font-weight: 600; }
+
+  .close-btn {
+    width: 32px; height: 32px;
+    border: none; background: var(--bg);
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--muted);
+  }
+
+  .close-btn:hover { background: var(--border); }
+
+  .form-group { margin-bottom: 18px; }
+
+  .form-group label {
+    display: block;
+    font-size: 12px;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    background: var(--bg);
+    font-family: 'Noto Serif TC', serif;
+    font-size: 14px;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.15s;
+    resize: vertical;
+  }
+
+  .form-group input:focus,
+  .form-group textarea:focus,
+  .form-group select:focus {
+    border-color: var(--accent);
+  }
+
+  .form-group textarea { min-height: 140px; }
+
+  .modal-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+  }
+
+  .btn-cancel {
+    padding: 9px 20px;
+    border: 1px solid var(--border);
+    background: transparent;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Noto Serif TC', serif;
+    font-size: 14px;
+    color: var(--muted);
+  }
+
+  .btn-save {
+    padding: 9px 24px;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Noto Serif TC', serif;
+    font-size: 14px;
+  }
+
+  /* Detail view */
+  .detail-content {
+    white-space: pre-wrap;
+    font-size: 15px;
+    line-height: 1.8;
+    color: var(--text);
+    margin-top: 12px;
+  }
+
+  .detail-meta {
+    font-size: 12px;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    gap: 16px;
+  }
+
+  .btn-edit {
+    padding: 9px 20px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Noto Serif TC', serif;
+    font-size: 14px;
+    color: var(--text);
+  }
+
+  .btn-delete {
+    padding: 9px 20px;
+    background: #fff0f0;
+    border: 1px solid #ffd6d6;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Noto Serif TC', serif;
+    font-size: 14px;
+    color: #c0392b;
+  }
+
+  @media (max-width: 640px) {
+    .sidebar { width: 220px; min-width: 220px; }
+    .content { padding: 20px 16px; }
+    .topbar { padding: 16px; }
+    .modal { padding: 20px; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <h1>📚 我的知識庫</h1>
+      <p id="total-count">0 篇筆記</p>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">分類</div>
+      <button class="cat-btn active" data-cat="all" onclick="filterCat('all')">
+        <span class="cat-dot" style="background:#888"></span>
+        全部
+        <span class="cat-count" id="count-all">0</span>
+      </button>
+      <button class="cat-btn" data-cat="中醫氣功" onclick="filterCat('中醫氣功')">
+        <span class="cat-dot" style="background:#7cb9a0"></span>
+        中醫氣功
+        <span class="cat-count" id="count-中醫氣功">0</span>
+      </button>
+      <button class="cat-btn" data-cat="醫療知識" onclick="filterCat('醫療知識')">
+        <span class="cat-dot" style="background:#6fa8dc"></span>
+        醫療知識
+        <span class="cat-count" id="count-醫療知識">0</span>
+      </button>
+      <button class="cat-btn" data-cat="個人成長" onclick="filterCat('個人成長')">
+        <span class="cat-dot" style="background:#e6a84a"></span>
+        個人成長
+        <span class="cat-count" id="count-個人成長">0</span>
+      </button>
+      <button class="cat-btn" data-cat="AI工具" onclick="filterCat('AI工具')">
+        <span class="cat-dot" style="background:#9b87d4"></span>
+        AI工具
+        <span class="cat-count" id="count-AI工具">0</span>
+      </button>
+      <button class="cat-btn" data-cat="靈感記錄" onclick="filterCat('靈感記錄')">
+        <span class="cat-dot" style="background:#e88080"></span>
+        靈感記錄
+        <span class="cat-count" id="count-靈感記錄">0</span>
+      </button>
+      <button class="cat-btn" data-cat="結構學習" onclick="filterCat('結構學習')">
+        <span class="cat-dot" style="background:#d4845a"></span>
+        結構學習
+        <span class="cat-count" id="count-結構學習">0</span>
+      </button>
+      <button class="cat-btn" data-cat="其他" onclick="filterCat('其他')">
+        <span class="cat-dot" style="background:#bbb"></span>
+        其他
+        <span class="cat-count" id="count-其他">0</span>
+      </button>
+    </div>
+
+    <div style="flex:1"></div>
+    <button class="add-btn" onclick="openAdd()">＋ 新增筆記</button>
+  </aside>
+
+  <!-- Main -->
+  <main class="main">
+    <div class="topbar">
+      <span class="view-title" id="view-title">全部</span>
+      <div class="search-wrap">
+        <span class="search-icon">🔍</span>
+        <input type="text" placeholder="搜尋筆記..." oninput="search(this.value)">
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="cards-grid" id="cards"></div>
+    </div>
+  </main>
+</div>
+
+<!-- Modal -->
+<div class="overlay" id="overlay" onclick="handleOverlayClick(event)">
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <h2 id="modal-title">新增筆記</h2>
+      <button class="close-btn" onclick="closeModal()">✕</button>
+    </div>
+    <div id="modal-body"></div>
+  </div>
+</div>
+
+<script>
+const CAT_COLORS = {
+  '中醫氣功': '#7cb9a0',
+  '醫療知識': '#6fa8dc',
+  '個人成長': '#e6a84a',
+  'AI工具': '#9b87d4',
+  '靈感記錄': '#e88080',
+  '結構學習': '#d4845a',
+  '其他': '#bbb',
+};
+
+let notes = JSON.parse(localStorage.getItem('kb_notes') || '[]');
+let currentCat = 'all';
+let searchQ = '';
+let editingId = null;
+
+// Pre-load from Notion content
+if (notes.length === 0) {
+  notes = [
+    { id: uid(), title: '氣感', cat: '中醫氣功', content: '從 Notion 匯入。關於氣感的探討與體驗紀錄。', date: '2025-08-15' },
+    { id: uid(), title: '討論氣脈', cat: '中醫氣功', content: '從 Notion 匯入。氣脈相關討論整理。', date: '2025-08-10' },
+    { id: uid(), title: '內斂情志對氣機的影響', cat: '中醫氣功', content: '從 Notion 匯入。情志內斂如何影響氣機運行的分析。', date: '2025-08-08' },
+    { id: uid(), title: '🗓 練功紀錄｜2025-08-15', cat: '中醫氣功', content: '從 Notion 匯入。今日練功紀錄與心得。', date: '2025-08-15' },
+    { id: uid(), title: '王醫師講義整理：打坐練功心法', cat: '中醫氣功', content: '從 Notion 匯入。打坐練功心法整理，來自王醫師講義。', date: '2025-08-20' },
+    { id: uid(), title: '紅棗深入探討', cat: '醫療知識', content: '從 Notion 匯入。紅棗的醫學研究與功效探討。', date: '2025-07-20' },
+    { id: uid(), title: '耳朵塞住（NEJM）', cat: '醫療知識', content: '從 Notion 匯入。參考 NEJM 相關文獻關於耳朵阻塞的處理。', date: '2025-07-15' },
+    { id: uid(), title: '馬來西亞醫療法', cat: '醫療知識', content: '從 Notion 匯入。馬來西亞醫療相關法規整理。', date: '2025-08-05' },
+    { id: uid(), title: '🌿 一場覺醒：我為什麼決定辭去理事長', cat: '個人成長', content: '從 Notion 匯入。辭去理事長職位的心路歷程與覺察。', date: '2025-08-18' },
+    { id: uid(), title: '🌿 邊界感覺察與共生關係筆記', cat: '個人成長', content: '從 Notion 匯入。關於邊界感與共生關係的深度覺察。', date: '2025-08-22' },
+    { id: uid(), title: '🧠 今日觀察與感悟：關於漸凍人（ALS）阿姨', cat: '個人成長', content: '從 Notion 匯入。觀察 ALS 病患的感悟與反思。', date: '2025-08-15' },
+    { id: uid(), title: '《當他說「你滾！」我告訴自己：這不是失敗，是長大的痛》', cat: '個人成長', content: '從 Notion 匯入。面對衝突與成長的心理歷程記錄。', date: '2025-08-01' },
+    { id: uid(), title: 'AI 的使用方法（萬sir）', cat: 'AI工具', content: '從 Notion 匯入。萬 sir 分享的 AI 工具使用方法整理。', date: '2025-08-12' },
+    { id: uid(), title: '🎨 Canva + GPT-5 整合功能完全導覽（2025版）', cat: 'AI工具', content: '從 Notion 匯入。Canva 與 GPT-5 整合功能的完整導覽筆記。', date: '2025-08-25' },
+    { id: uid(), title: '使用 Notion AI 測試（語音）', cat: 'AI工具', content: '從 Notion 匯入。Notion AI 語音功能的測試紀錄。', date: '2025-08-10' },
+    { id: uid(), title: '🖐 如何判斷「順張力」方向？', cat: '結構學習', date: '2025-04-26', content: `【核心原理：找「最少阻力路徑」】
+林兩傳的順勢操作，就是「順著身體自然釋放的方向」去走。
+皮膚張力走向有主軸，就像打結的線團，會有一個方向最鬆、最滑、最願意走。
+
+───────────────────────
+【三步判斷法】
+
+Step 1：捏起皮膚，微幅試探
+用指腹或掌根輕輕提起一小片皮膚（約2-3公分範圍），往不同方向輕推（1-2公分即可）。
+• 卡卡的、拉住不放 → 逆張力
+• 滑順、像自動帶著走 → 順張力
+
+Step 2：確認主方向
+找到最輕鬆、最容易滑動的方向，這就是「順勢」。
+順張力 ≠ 完全沒阻力，而是「阻力最小」的那個方向。
+
+Step 3：沿著張力線延伸操作
+沿線滑動，像解開拉鍊，每推一段再次試探，因為張力方向會隨著鬆解而改變。
+
+───────────────────────
+【例子：肩胛骨內側操作】
+捏起皮膚試探：
+• 往上推 → 卡住
+• 往下推 → 有點阻力
+• 往外推 → 突然很順，皮膚像被帶動 ✅
+→ 沿著「往外推」方向操作，即為順張力。
+
+───────────────────────
+【進階判斷技巧】
+• 浮動感：順勢時皮膚下方會有「浮起來」的感覺，筋膜在釋放
+• 搭配呼吸：患者會自然深呼吸，是張力打開的訊號
+
+───────────────────────
+【常見錯誤】
+❌ 太急、力量過大：感覺不到張力細微變化
+❌ 只試兩個方向：需試探至少3-4個方向
+❌ 忽略動態變化：鬆解中張力方向會改變，要邊走邊調整
+
+───────────────────────
+【一句話總結】
+「順張力」＝ 找到皮膚最願意被帶動的方向，像牽著小孩走路，不是拖著走，而是引導他自己前進。
+
+【練習建議】
+在自己手臂、肩膀上練習，感覺皮膚哪個方向最滑。
+或找家人練手感，熟悉不同體型、不同部位的張力走向。` },
+    { id: uid(), title: '📓 學習週記｜2025/4/20～4/26（林兩傳）', cat: '結構學習', date: '2025-04-26', content: `【一、整復手法 SOP】
+深入討論整復 SOP 流程，從小腿肚撥筋到肩胛骨調整，展現成熟的操作邏輯。
+探索「解皮」與筋膜鬆動的細節，手法核心在於皮筋連結處的釋放與結構調整。
+
+【二、氣功與泓德老師課程設計】
+針對泓德老師的排濁課程，規劃 Instagram 宣傳策略，同步深化對課程內容的理解。
+討論密宗式大禮拜與氣感連結，反思「公益課」與「收費課」的定位差異，以及學習與推廣之間的平衡。
+學習如何把老師的傳統內容轉化為現代可接受的系統化教學。
+
+【三、科學氣功書籍評估】
+研究一本科學氣功書籍，討論其參考價值，展現篩選學習資源時的批判性思維與專業判斷。
+
+【四、Notion 系統建置與數位學習】
+學習善用 Notion 進行筆記統整，從碎片記錄習慣逐步過渡到結構化管理。
+透過實作練習提升數位工具運用能力，為知識管理打下基礎。
+
+【五、自我反思與心理層級提升】
+深入討論心智升級概念：工具心智 → 社會化心智 → 自我授權心智。
+對照自身現況反思，在忙碌生活中保持學習與內在成長的動力。
+
+【本週關鍵字】
+#筋膜手法 #氣功現代化 #數位工具 #知識管理 #心智成長` },
+    { id: uid(), title: '🧠 CODE＋PARA 第二大腦實戰操作法', cat: 'AI工具', date: '2025-08-28', content: `【核心概念】
+CODE＋PARA 是一套讓知識真正融入生活的「第二大腦」方法論。
+CODE = Capture（捕捉）→ Organize（整理）→ Distill（提煉）→ Express（表達）
+PARA = Projects（專案）/ Areas（領域）/ Resources（資源）/ Archive（歸檔）
+
+───────────────────────
+【第一步：建立 Inbox 收件匣】
+所有稍縱即逝的想法、靈感、待辦、引用，統一先丟到 Inbox，不猶豫，先捕捉再說。
+• 數位：Notion 最上層建一個「📥 Inbox」頁面
+• 紙本：筆記本前幾頁用顏色標籤標示
+
+───────────────────────
+【第二步：每日 CODE 流程】
+C 捕捉 Capture   → 隨時隨地丟 Inbox（工作空檔、閱讀、開會）
+O 整理 Organize  → 每天下班前 5 分鐘，清空 Inbox 分類到 PARA
+D 提煉 Distill   → 每週一次（例：週日）挑關鍵 1–3 條，寫成標題式摘要
+E 表達 Express   → 每月或完成里程碑後，輸出為文章、簡報、教案、IG
+
+───────────────────────
+【PARA 四大資料夾說明】
+📁 Projects（短期任務）
+  欄位：Name / Status（Todo/Doing/Done）/ Due / Area 關聯
+  模板：專案目標 ＋ 里程碑 ＋ 下一步行動
+
+📁 Areas（長期責任）
+  例：診所營運 / 家庭親子 / 自我成長 / 財務規劃 / 教學課程
+  每個 Area 內嵌相關 Projects & Resources 視圖
+
+📁 Resources（資源主題）
+  欄位：Topic / Type（書/文章/課程/食譜）/ Link / Tags
+  用法：Inbox 素材整理後用 Relate 歸位，隨時 filter 查閱
+
+📁 Archive（歸檔）
+  條件：Status = Done 或手動移入
+  功能：保留備查但不干擾日常
+
+───────────────────────
+【週期化節奏建議】
+• 工作日空檔 → Capture
+• 下班前 5 分鐘 → Organize
+• 週末 me-time → Distill
+• 月末 / 達成任務 → Express ＋ Archive
+
+───────────────────────
+【Inbox 欄位設定（Notion Table）】
+Title / Captured At（now()預設）/ Type（Idea/Task/Clip/Quote）/ Source / Tags
+
+───────────────────────
+【實例：兒童科學教學筆記】
+1. Capture：拍下「溫度計」「秤」照片 → 丟 Inbox
+2. Organize：移到 Resources / 科學教學 / 工具與用途
+3. Distill：提煉「溫度計、量程、誤差」三重點
+4. Express：做成 PDF 教案分享給家長群
+
+───────────────────────
+【養成習慣的關鍵】
+• 隨手性：Capture 工具放手機首頁
+• 儀式感：每天固定時間（例：晚飯後）做 Organize
+• 可視化：用顏色、emoji、Tag 強化 Distill 成果
+• 成果驅動：每月完成一件 Express 輸出獎勵自己
+
+【結論】先做再優化，從「今晚下班前清一次 Inbox」開始！` },
+  ];
+  save();
+}
+
+function uid() {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2);
+}
+
+function save() {
+  localStorage.setItem('kb_notes', JSON.stringify(notes));
+  updateCounts();
+  render();
+}
+
+function updateCounts() {
+  const cats = ['all','中醫氣功','醫療知識','個人成長','AI工具','靈感記錄','結構學習','其他'];
+  cats.forEach(c => {
+    const el = document.getElementById('count-' + c);
+    if (el) el.textContent = c === 'all' ? notes.length : notes.filter(n => n.cat === c).length;
+  });
+  document.getElementById('total-count').textContent = notes.length + ' 篇筆記';
+}
+
+function getFiltered() {
+  return notes.filter(n => {
+    const matchCat = currentCat === 'all' || n.cat === currentCat;
+    const matchQ = !searchQ || n.title.includes(searchQ) || n.content.includes(searchQ);
+    return matchCat && matchQ;
+  }).sort((a, b) => b.date.localeCompare(a.date));
+}
+
+function render() {
+  const filtered = getFiltered();
+  const container = document.getElementById('cards');
+
+  if (filtered.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state" style="grid-column:1/-1">
+        <div class="emoji">📭</div>
+        <p>這裡還沒有筆記<br>點左下角「新增筆記」開始記錄</p>
+      </div>`;
+    return;
+  }
+
+  container.innerHTML = filtered.map(n => `
+    <div class="card" onclick="openDetail('${n.id}')">
+      <div class="card-cat">
+        <span style="width:7px;height:7px;border-radius:50%;background:${CAT_COLORS[n.cat]||'#bbb'};display:inline-block"></span>
+        ${n.cat}
+      </div>
+      <div class="card-title">${n.title}</div>
+      <div class="card-preview">${n.content}</div>
+      <div class="card-date">${n.date}</div>
+    </div>
+  `).join('');
+}
+
+function filterCat(cat) {
+  currentCat = cat;
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.toggle('active', b.dataset.cat === cat));
+  document.getElementById('view-title').textContent = cat === 'all' ? '全部' : cat;
+  render();
+}
+
+function search(q) {
+  searchQ = q;
+  render();
+}
+
+// Modal helpers
+function openModal() { document.getElementById('overlay').classList.add('open'); }
+function closeModal() {
+  document.getElementById('overlay').classList.remove('open');
+  editingId = null;
+}
+function handleOverlayClick(e) { if (e.target === document.getElementById('overlay')) closeModal(); }
+
+function openAdd() {
+  editingId = null;
+  document.getElementById('modal-title').textContent = '新增筆記';
+  document.getElementById('modal-body').innerHTML = formHTML({ title:'', cat: currentCat === 'all' ? '其他' : currentCat, content:'', date: new Date().toISOString().slice(0,10) });
+  openModal();
+}
+
+function openDetail(id) {
+  const n = notes.find(x => x.id === id);
+  if (!n) return;
+  document.getElementById('modal-title').textContent = '';
+  document.getElementById('modal-body').innerHTML = `
+    <div style="margin-bottom:8px">
+      <span style="font-size:13px;color:${CAT_COLORS[n.cat]||'#bbb'};font-family:'DM Mono',monospace;">● ${n.cat}</span>
+    </div>
+    <h2 style="font-size:20px;font-weight:600;line-height:1.4;margin-bottom:16px">${n.title}</h2>
+    <div class="detail-meta">
+      <span>📅 ${n.date}</span>
+    </div>
+    <div class="detail-content">${n.content}</div>
+    <div class="modal-actions">
+      <button class="btn-delete" onclick="deleteNote('${id}')">刪除</button>
+      <button class="btn-edit" onclick="openEdit('${id}')">編輯</button>
+      <button class="btn-save" onclick="closeModal()">關閉</button>
+    </div>
+  `;
+  openModal();
+}
+
+function openEdit(id) {
+  const n = notes.find(x => x.id === id);
+  if (!n) return;
+  editingId = id;
+  document.getElementById('modal-title').textContent = '編輯筆記';
+  document.getElementById('modal-body').innerHTML = formHTML(n);
+}
+
+function formHTML(n) {
+  const cats = ['中醫氣功','醫療知識','個人成長','AI工具','靈感記錄','結構學習','其他'];
+  return `
+    <div class="form-group">
+      <label>標題</label>
+      <input id="f-title" type="text" value="${(n.title||'').replace(/"/g,'&quot;')}" placeholder="筆記標題">
+    </div>
+    <div class="form-group">
+      <label>分類</label>
+      <select id="f-cat">
+        ${cats.map(c => `<option value="${c}" ${n.cat===c?'selected':''}>${c}</option>`).join('')}
+      </select>
+    </div>
+    <div class="form-group">
+      <label>日期</label>
+      <input id="f-date" type="date" value="${n.date||new Date().toISOString().slice(0,10)}">
+    </div>
+    <div class="form-group">
+      <label>內容</label>
+      <textarea id="f-content" placeholder="記錄你的想法、靈感、整理...">${n.content||''}</textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal()">取消</button>
+      <button class="btn-save" onclick="saveNote()">儲存</button>
+    </div>
+  `;
+}
+
+function saveNote() {
+  const title = document.getElementById('f-title').value.trim();
+  const cat = document.getElementById('f-cat').value;
+  const date = document.getElementById('f-date').value;
+  const content = document.getElementById('f-content').value.trim();
+  if (!title) { alert('請填寫標題'); return; }
+
+  if (editingId) {
+    const idx = notes.findIndex(n => n.id === editingId);
+    if (idx >= 0) notes[idx] = { ...notes[idx], title, cat, date, content };
+  } else {
+    notes.unshift({ id: uid(), title, cat, date, content });
+  }
+  closeModal();
+  save();
+}
+
+function deleteNote(id) {
+  if (!confirm('確定要刪除這篇筆記嗎？')) return;
+  notes = notes.filter(n => n.id !== id);
+  closeModal();
+  save();
+}
+
+// Init
+updateCounts();
+render();
+</script>
+</body>
+</html>
