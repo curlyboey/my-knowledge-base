@@ -412,11 +412,106 @@
     color: #c0392b;
   }
 
-  @media (max-width: 640px) {
-    .sidebar { width: 220px; min-width: 220px; }
-    .content { padding: 20px 16px; }
-    .topbar { padding: 16px; }
-    .modal { padding: 20px; }
+  /* ── Mobile: bottom nav + single column ── */
+  @media (max-width: 768px) {
+    .app { flex-direction: column; height: 100vh; }
+
+    /* Hide desktop sidebar */
+    .sidebar {
+      display: none;
+    }
+
+    /* Main takes full width */
+    .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+    .topbar {
+      padding: 12px 16px;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .view-title { font-size: 17px; }
+
+    .content { padding: 16px 14px; padding-bottom: 80px; }
+
+    .cards-grid {
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    .card { padding: 16px; }
+    .card-title { font-size: 15px; }
+
+    .modal { padding: 20px; max-height: 90vh; }
+
+    /* Bottom navigation bar */
+    .bottom-nav {
+      display: flex;
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      z-index: 50;
+      padding: 0;
+      height: 60px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .bottom-nav button {
+      flex: 0 0 auto;
+      min-width: 72px;
+      padding: 8px 12px;
+      border: none;
+      background: transparent;
+      font-family: 'Noto Serif TC', serif;
+      font-size: 12px;
+      color: var(--muted);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      border-top: 2px solid transparent;
+      transition: all 0.15s;
+    }
+
+    .bottom-nav button.active {
+      color: var(--accent);
+      border-top-color: var(--accent);
+      font-weight: 600;
+    }
+
+    .bottom-nav .nav-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+    }
+
+    /* Floating add button */
+    .fab {
+      display: flex;
+      position: fixed;
+      bottom: 72px;
+      right: 20px;
+      width: 52px; height: 52px;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      font-size: 24px;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(45,106,79,0.35);
+      z-index: 60;
+    }
+  }
+
+  /* Hide bottom nav on desktop */
+  @media (min-width: 769px) {
+    .bottom-nav { display: none; }
+    .fab { display: none; }
+    .sidebar .add-btn { display: block; }
   }
 </style>
 </head>
@@ -508,6 +603,12 @@
     </div>
   </main>
 </div>
+
+<!-- Mobile Bottom Nav -->
+<nav class="bottom-nav" id="bottom-nav"></nav>
+
+<!-- Mobile FAB -->
+<button class="fab" onclick="openAdd()" title="新增筆記">＋</button>
 
 <!-- Modal -->
 <div class="overlay" id="overlay" onclick="handleOverlayClick(event)">
@@ -1068,7 +1169,32 @@ function uid() {
 function save() {
   localStorage.setItem('kb_notes', JSON.stringify(notes));
   updateCounts();
+  renderBottomNav();
   render();
+}
+
+function renderBottomNav() {
+  const nav = document.getElementById('bottom-nav');
+  if (!nav) return;
+  const cats = [
+    { key: 'all', label: '全部', color: '#888' },
+    { key: '中醫氣功', label: '中醫氣功', color: '#7cb9a0' },
+    { key: '醫療知識', label: '醫療知識', color: '#6fa8dc' },
+    { key: '個人成長', label: '個人成長', color: '#e6a84a' },
+    { key: 'AI工具', label: 'AI工具', color: '#9b87d4' },
+    { key: '靈感記錄', label: '靈感記錄', color: '#e88080' },
+    { key: '結構學習', label: '結構學習', color: '#d4845a' },
+    { key: '留下來的人', label: '留下來的人', color: '#c084a0' },
+    { key: '理財', label: '理財', color: '#4a9eda' },
+    { key: '親子教養', label: '親子教養', color: '#f0a050' },
+    { key: '其他', label: '其他', color: '#bbb' },
+  ];
+  nav.innerHTML = cats.map(c => `
+    <button onclick="filterCat('${c.key}')" class="${currentCat === c.key ? 'active' : ''}">
+      <span class="nav-dot" style="background:${c.color}"></span>
+      ${c.label}
+    </button>
+  `).join('');
 }
 
 function updateCounts() {
@@ -1118,6 +1244,7 @@ function filterCat(cat) {
   currentCat = cat;
   document.querySelectorAll('.cat-btn').forEach(b => b.classList.toggle('active', b.dataset.cat === cat));
   document.getElementById('view-title').textContent = cat === 'all' ? '全部' : cat;
+  renderBottomNav();
   render();
 }
 
@@ -1225,6 +1352,7 @@ function deleteNote(id) {
 
 // Init
 updateCounts();
+renderBottomNav();
 render();
 </script>
 </body>
