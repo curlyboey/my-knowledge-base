@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tenses Notes – Primary 4</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Nunito+Sans:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #FFF9F0;
+    --card1: #FFF0D6;
+    --card2: #E8F4FF;
+    --card3: #E6FFE6;
+    --accent1: #FF8C00;
+    --accent2: #2176AE;
+    --accent3: #27A843;
+    --dark: #2D2D2D;
+    --muted: #666;
+    --radius: 16px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Nunito Sans', sans-serif;
+    background: var(--bg);
+    color: var(--dark);
+    padding: 32px 20px 60px;
+    max-width: 820px;
+    margin: 0 auto;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 36px;
+  }
+
+  header h1 {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+    font-size: 2rem;
+    color: var(--dark);
+    letter-spacing: -0.5px;
+  }
+
+  header p {
+    font-size: 0.95rem;
+    color: var(--muted);
+    margin-top: 6px;
+  }
+
+  .badge {
+    display: inline-block;
+    background: var(--accent1);
+    color: white;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+  }
+
+  .tense-card {
+    border-radius: var(--radius);
+    padding: 28px 28px 24px;
+    margin-bottom: 28px;
+    border: 2.5px solid transparent;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .tense-card.t1 { background: var(--card1); border-color: var(--accent1); }
+  .tense-card.t2 { background: var(--card2); border-color: var(--accent2); }
+  .tense-card.t3 { background: var(--card3); border-color: var(--accent3); }
+
+  .tense-card .number {
+    position: absolute;
+    top: -10px;
+    right: 20px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+    font-size: 5rem;
+    opacity: 0.07;
+    line-height: 1;
+  }
+
+  .tense-title {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+    font-size: 1.3rem;
+    margin-bottom: 4px;
+  }
+  .t1 .tense-title { color: var(--accent1); }
+  .t2 .tense-title { color: var(--accent2); }
+  .t3 .tense-title { color: var(--accent3); }
+
+  .tense-subtitle {
+    font-size: 0.88rem;
+    color: var(--muted);
+    margin-bottom: 16px;
+    font-style: italic;
+  }
+
+  .section-label {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--muted);
+    margin: 16px 0 8px;
+  }
+
+  .pill-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+
+  .pill {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    padding: 5px 14px;
+    border-radius: 20px;
+    background: white;
+  }
+  .t1 .pill { color: var(--accent1); border: 2px solid var(--accent1); }
+  .t2 .pill { color: var(--accent2); border: 2px solid var(--accent2); }
+  .t3 .pill { color: var(--accent3); border: 2px solid var(--accent3); }
+
+  .formula-box {
+    background: white;
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin-bottom: 12px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+
+  .formula-box span.var {
+    font-style: italic;
+    opacity: 0.6;
+    font-weight: 600;
+  }
+
+  .example-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 4px;
+    font-size: 0.9rem;
+  }
+
+  .example-table th {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 8px 12px;
+    background: white;
+    text-align: left;
+    border-bottom: 2px solid rgba(0,0,0,0.08);
+  }
+
+  .example-table td {
+    padding: 9px 12px;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+    background: white;
+    vertical-align: top;
+  }
+
+  .example-table tr:last-child td { border-bottom: none; }
+
+  .example-table .em {
+    font-weight: 700;
+    font-family: 'Nunito', sans-serif;
+  }
+  .t1 .example-table .em { color: var(--accent1); }
+  .t2 .example-table .em { color: var(--accent2); }
+  .t3 .example-table .em { color: var(--accent3); }
+
+  /* Irregular verbs table */
+  .irr-section {
+    background: white;
+    border-radius: var(--radius);
+    padding: 24px 28px;
+    margin-bottom: 28px;
+    border: 2.5px solid #E0D4FF;
+  }
+
+  .irr-section h2 {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+    font-size: 1.1rem;
+    color: #7B4FD0;
+    margin-bottom: 4px;
+  }
+
+  .irr-section p {
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+
+  .irr-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+  }
+
+  .irr-table th {
+    background: #F0E8FF;
+    color: #7B4FD0;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 8px 14px;
+    text-align: left;
+  }
+
+  .irr-table td {
+    padding: 8px 14px;
+    border-bottom: 1px solid #F0E8FF;
+    font-family: 'Nunito', sans-serif;
+  }
+
+  .irr-table td:first-child { font-weight: 600; }
+  .irr-table td:nth-child(2) { font-weight: 700; color: var(--accent1); }
+  .irr-table td:nth-child(3) { font-weight: 700; color: #7B4FD0; }
+  .irr-table tr:last-child td { border-bottom: none; }
+
+  /* Tips box */
+  .tips-box {
+    background: #FFF0F0;
+    border: 2.5px solid #FF6B6B;
+    border-radius: var(--radius);
+    padding: 22px 28px;
+    margin-bottom: 28px;
+  }
+
+  .tips-box h2 {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+    color: #E83535;
+    font-size: 1.1rem;
+    margin-bottom: 12px;
+  }
+
+  .tip-item {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+
+  .tip-icon {
+    font-size: 1rem;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  footer {
+    text-align: center;
+    font-size: 0.8rem;
+    color: #bbb;
+    margin-top: 20px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="badge">Primary 4 · English Grammar</div>
+  <h1>📝 Tenses – Quick Notes</h1>
+  <p>Present Simple &nbsp;·&nbsp; Past Simple &nbsp;·&nbsp; Present Continuous</p>
+</header>
+
+<!-- TENSE 1: Present Simple -->
+<div class="tense-card t1">
+  <div class="number">1</div>
+  <div class="tense-title">Present Simple</div>
+  <div class="tense-subtitle">Things that happen always / usually / every day</div>
+
+  <div class="section-label">🕐 Time Words</div>
+  <div class="pill-row">
+    <span class="pill">always</span>
+    <span class="pill">usually</span>
+    <span class="pill">often</span>
+    <span class="pill">sometimes</span>
+    <span class="pill">never</span>
+    <span class="pill">every day</span>
+    <span class="pill">on Mondays</span>
+  </div>
+
+  <div class="section-label">📐 Formula</div>
+  <div class="formula-box">
+    ✅ <span class="var">I / You / We / They</span> → <strong>verb</strong><br>
+    ✅ <span class="var">He / She / It</span> → <strong>verb + s / es</strong><br>
+    ❌ <span class="var">I / You / We / They</span> → <strong>do not + verb</strong><br>
+    ❌ <span class="var">He / She / It</span> → <strong>does not + verb</strong>
+  </div>
+
+  <div class="section-label">💡 Examples</div>
+  <table class="example-table">
+    <tr><th>✅ Positive</th><th>❌ Negative</th></tr>
+    <tr>
+      <td>I <span class="em">eat</span> rice every day.</td>
+      <td>I <span class="em">do not eat</span> bread.</td>
+    </tr>
+    <tr>
+      <td>She <span class="em">plays</span> football on Saturdays.</td>
+      <td>She <span class="em">does not play</span> tennis.</td>
+    </tr>
+    <tr>
+      <td>They <span class="em">go</span> to school by bus.</td>
+      <td>He <span class="em">does not like</span> cats.</td>
+    </tr>
+  </table>
+</div>
+
+<!-- TENSE 2: Past Simple -->
+<div class="tense-card t2">
+  <div class="number">2</div>
+  <div class="tense-title">Past Simple</div>
+  <div class="tense-subtitle">Things that already happened (finished)</div>
+
+  <div class="section-label">🕐 Time Words</div>
+  <div class="pill-row">
+    <span class="pill">yesterday</span>
+    <span class="pill">last night</span>
+    <span class="pill">last week</span>
+    <span class="pill">ago</span>
+    <span class="pill">in 2020</span>
+    <span class="pill">just now</span>
+  </div>
+
+  <div class="section-label">📐 Formula</div>
+  <div class="formula-box">
+    ✅ <span class="var">Subject</span> → <strong>verb + ed</strong> &nbsp;(regular)<br>
+    ✅ <span class="var">Subject</span> → <strong>irregular verb</strong> &nbsp;(see list below)<br>
+    ❌ <span class="var">Subject</span> → <strong>did not + verb</strong>
+  </div>
+
+  <div class="section-label">💡 Examples</div>
+  <table class="example-table">
+    <tr><th>✅ Positive</th><th>❌ Negative</th></tr>
+    <tr>
+      <td>I <span class="em">walked</span> to school yesterday.</td>
+      <td>I <span class="em">did not walk</span> today.</td>
+    </tr>
+    <tr>
+      <td>She <span class="em">ate</span> pizza last night.</td>
+      <td>She <span class="em">did not eat</span> vegetables.</td>
+    </tr>
+    <tr>
+      <td>They <span class="em">went</span> to the park last week.</td>
+      <td>He <span class="em">did not go</span> to school.</td>
+    </tr>
+  </table>
+</div>
+
+<!-- TENSE 3: Present Continuous -->
+<div class="tense-card t3">
+  <div class="number">3</div>
+  <div class="tense-title">Present Continuous</div>
+  <div class="tense-subtitle">Things happening RIGHT NOW</div>
+
+  <div class="section-label">🕐 Time Words</div>
+  <div class="pill-row">
+    <span class="pill">now</span>
+    <span class="pill">right now</span>
+    <span class="pill">at the moment</span>
+    <span class="pill">look!</span>
+    <span class="pill">listen!</span>
+  </div>
+
+  <div class="section-label">📐 Formula</div>
+  <div class="formula-box">
+    ✅ <span class="var">I</span> → <strong>am + verb-ing</strong><br>
+    ✅ <span class="var">He / She / It</span> → <strong>is + verb-ing</strong><br>
+    ✅ <span class="var">You / We / They</span> → <strong>are + verb-ing</strong><br>
+    ❌ → <strong>am / is / are + not + verb-ing</strong>
+  </div>
+
+  <div class="section-label">💡 Examples</div>
+  <table class="example-table">
+    <tr><th>✅ Positive</th><th>❌ Negative</th></tr>
+    <tr>
+      <td>I <span class="em">am eating</span> now.</td>
+      <td>I <span class="em">am not sleeping</span>.</td>
+    </tr>
+    <tr>
+      <td>She <span class="em">is reading</span> a book.</td>
+      <td>She <span class="em">is not watching</span> TV.</td>
+    </tr>
+    <tr>
+      <td>They <span class="em">are playing</span> outside.</td>
+      <td>We <span class="em">are not going</span> home yet.</td>
+    </tr>
+  </table>
+</div>
+
+<!-- Irregular Verbs -->
+<div class="irr-section">
+  <h2>⚡ Important Irregular Verbs (Past Tense)</h2>
+  <p>These verbs do NOT add –ed. You must remember them!</p>
+  <table class="irr-table">
+    <tr><th>Base Form</th><th>Past Simple</th><th>Meaning</th></tr>
+    <tr><td>go</td><td>went</td><td>去</td></tr>
+    <tr><td>eat</td><td>ate</td><td>吃</td></tr>
+    <tr><td>drink</td><td>drank</td><td>喝</td></tr>
+    <tr><td>run</td><td>ran</td><td>跑</td></tr>
+    <tr><td>see</td><td>saw</td><td>看见</td></tr>
+    <tr><td>take</td><td>took</td><td>拿 / 带</td></tr>
+    <tr><td>give</td><td>gave</td><td>给</td></tr>
+    <tr><td>come</td><td>came</td><td>来</td></tr>
+    <tr><td>buy</td><td>bought</td><td>买</td></tr>
+    <tr><td>make</td><td>made</td><td>做</td></tr>
+    <tr><td>have</td><td>had</td><td>有 / 拥有</td></tr>
+    <tr><td>get</td><td>got</td><td>得到</td></tr>
+    <tr><td>say</td><td>said</td><td>说</td></tr>
+    <tr><td>find</td><td>found</td><td>找到</td></tr>
+    <tr><td>write</td><td>wrote</td><td>写</td></tr>
+    <tr><td>read</td><td>read</td><td>读（发音变了！）</td></tr>
+  </table>
+</div>
+
+<!-- Tips -->
+<div class="tips-box">
+  <h2>🚨 Common Mistakes to Avoid</h2>
+  <div class="tip-item">
+    <span class="tip-icon">❌</span>
+    <span><strong>She go to school.</strong> → ✅ She <strong>goes</strong> to school. &nbsp;(he/she/it needs +s)</span>
+  </div>
+  <div class="tip-item">
+    <span class="tip-icon">❌</span>
+    <span><strong>I am eat now.</strong> → ✅ I <strong>am eating</strong> now. &nbsp;(continuous needs –ing)</span>
+  </div>
+  <div class="tip-item">
+    <span class="tip-icon">❌</span>
+    <span><strong>She goed home.</strong> → ✅ She <strong>went</strong> home. &nbsp;(irregular verb!)</span>
+  </div>
+  <div class="tip-item">
+    <span class="tip-icon">❌</span>
+    <span><strong>He did not went.</strong> → ✅ He <strong>did not go</strong>. &nbsp;(after did not → base form)</span>
+  </div>
+  <div class="tip-item">
+    <span class="tip-icon">💡</span>
+    <span><strong>Trick:</strong> Look for the TIME WORD first — it tells you which tense to use!</span>
+  </div>
+</div>
+
+<footer>Primary 4 · REAL Schools · Pertengahan Tahun 2026</footer>
+
+</body>
+</html>
