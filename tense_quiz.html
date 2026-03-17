@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tenses Quiz – 阿智</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #FFF9F0;
+    --orange: #FF8C00;
+    --blue: #2176AE;
+    --green: #27A843;
+    --red: #E83535;
+    --purple: #7B4FD0;
+    --dark: #2D2D2D;
+    --muted: #666;
+    --card: #ffffff;
+    --radius: 16px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg);
+    color: var(--dark);
+    padding: 20px 16px 80px;
+    max-width: 680px;
+    margin: 0 auto;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 28px;
+    padding: 24px 20px;
+    background: var(--dark);
+    border-radius: var(--radius);
+    color: white;
+  }
+
+  header h1 {
+    font-size: 1.6rem;
+    font-weight: 900;
+    letter-spacing: -0.5px;
+  }
+
+  header p {
+    font-size: 0.9rem;
+    opacity: 0.6;
+    margin-top: 6px;
+  }
+
+  .progress-bar {
+    background: rgba(255,255,255,0.15);
+    border-radius: 20px;
+    height: 6px;
+    margin-top: 14px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--orange);
+    border-radius: 20px;
+    transition: width 0.4s ease;
+  }
+
+  .progress-text {
+    font-size: 0.8rem;
+    opacity: 0.7;
+    margin-top: 6px;
+  }
+
+  /* Question card */
+  .q-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 24px 22px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    display: none;
+  }
+
+  .q-card.active { display: block; animation: fadeIn 0.3s ease; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .q-type-badge {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+  }
+
+  .badge-mc { background: #FFF0D6; color: var(--orange); }
+  .badge-fill { background: #E8F4FF; color: var(--blue); }
+  .badge-tf { background: #E6FFE6; color: var(--green); }
+  .badge-order { background: #F0E8FF; color: var(--purple); }
+
+  .q-number {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+
+  .q-text {
+    font-size: 1.05rem;
+    font-weight: 700;
+    line-height: 1.5;
+    margin-bottom: 18px;
+    color: var(--dark);
+  }
+
+  .q-text .blank {
+    display: inline-block;
+    min-width: 80px;
+    border-bottom: 2px solid var(--dark);
+    margin: 0 4px;
+    text-align: center;
+    font-style: italic;
+    color: var(--muted);
+  }
+
+  /* MC options */
+  .options { display: grid; gap: 10px; }
+
+  .option-btn {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2.5px solid #e8e8e8;
+    border-radius: 12px;
+    background: white;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .option-btn:hover:not(:disabled) {
+    border-color: var(--orange);
+    background: #FFF8EE;
+  }
+
+  .option-btn .opt-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: #f5f5f5;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+    transition: all 0.15s;
+  }
+
+  .option-btn.correct { border-color: var(--green) !important; background: #E6FFE6 !important; }
+  .option-btn.correct .opt-label { background: var(--green); color: white; }
+  .option-btn.wrong { border-color: var(--red) !important; background: #FFF0F0 !important; }
+  .option-btn.wrong .opt-label { background: var(--red); color: white; }
+  .option-btn.show-correct { border-color: var(--green); background: #E6FFE6; opacity: 0.7; }
+
+  /* Fill in blank */
+  .fill-input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2.5px solid #e8e8e8;
+    border-radius: 12px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    outline: none;
+    transition: border-color 0.15s;
+    margin-bottom: 12px;
+  }
+
+  .fill-input:focus { border-color: var(--blue); }
+  .fill-input.correct { border-color: var(--green); background: #E6FFE6; }
+  .fill-input.wrong { border-color: var(--red); background: #FFF0F0; }
+
+  /* True/False */
+  .tf-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .tf-btn {
+    padding: 16px;
+    border: 2.5px solid #e8e8e8;
+    border-radius: 12px;
+    background: white;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: center;
+  }
+
+  .tf-btn:hover:not(:disabled) { border-color: var(--green); background: #f0fff4; }
+  .tf-btn.correct { border-color: var(--green) !important; background: #E6FFE6 !important; color: var(--green); }
+  .tf-btn.wrong { border-color: var(--red) !important; background: #FFF0F0 !important; color: var(--red); }
+
+  /* Rearrange */
+  .word-bank {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 14px;
+    min-height: 44px;
+    padding: 10px;
+    background: #f8f8f8;
+    border-radius: 10px;
+    border: 2px dashed #ddd;
+  }
+
+  .word-chip {
+    padding: 6px 14px;
+    background: white;
+    border: 2px solid #ddd;
+    border-radius: 20px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s;
+    user-select: none;
+  }
+
+  .word-chip:hover { border-color: var(--purple); background: #f0e8ff; }
+  .word-chip.used { opacity: 0.3; cursor: default; }
+
+  .answer-area {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    min-height: 44px;
+    padding: 10px;
+    background: white;
+    border-radius: 10px;
+    border: 2.5px solid #ddd;
+    margin-bottom: 12px;
+    align-items: center;
+  }
+
+  .answer-area.correct-area { border-color: var(--green); background: #E6FFE6; }
+  .answer-area.wrong-area { border-color: var(--red); background: #FFF0F0; }
+
+  .answer-chip {
+    padding: 6px 14px;
+    background: var(--purple);
+    color: white;
+    border-radius: 20px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .answer-chip:hover { opacity: 0.8; }
+
+  .area-label {
+    font-size: 0.78rem;
+    font-weight: 800;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+  }
+
+  /* Feedback */
+  .feedback {
+    display: none;
+    margin-top: 14px;
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    line-height: 1.5;
+  }
+
+  .feedback.correct { display: block; background: #E6FFE6; color: #1a7a35; border-left: 4px solid var(--green); }
+  .feedback.wrong { display: block; background: #FFF0F0; color: #c0392b; border-left: 4px solid var(--red); }
+
+  /* Submit button */
+  .submit-btn {
+    width: 100%;
+    padding: 14px;
+    background: var(--dark);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1rem;
+    font-weight: 800;
+    cursor: pointer;
+    margin-top: 16px;
+    transition: opacity 0.15s;
+  }
+
+  .submit-btn:hover { opacity: 0.88; }
+  .submit-btn:disabled { opacity: 0.4; cursor: default; }
+
+  .next-btn {
+    width: 100%;
+    padding: 14px;
+    background: var(--orange);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1rem;
+    font-weight: 800;
+    cursor: pointer;
+    margin-top: 10px;
+    display: none;
+  }
+
+  /* Results */
+  #results {
+    display: none;
+    text-align: center;
+    padding: 40px 24px;
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  }
+
+  .score-circle {
+    width: 120px; height: 120px;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    font-family: 'Nunito', sans-serif;
+  }
+
+  .score-num {
+    font-size: 2.8rem;
+    font-weight: 900;
+    line-height: 1;
+  }
+
+  .score-label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    opacity: 0.7;
+  }
+
+  .result-msg {
+    font-size: 1.4rem;
+    font-weight: 900;
+    margin-bottom: 8px;
+  }
+
+  .result-sub {
+    font-size: 0.9rem;
+    color: var(--muted);
+    margin-bottom: 28px;
+  }
+
+  .retry-btn {
+    padding: 14px 32px;
+    background: var(--dark);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1rem;
+    font-weight: 800;
+    cursor: pointer;
+  }
+
+  .review-list {
+    text-align: left;
+    margin-top: 24px;
+  }
+
+  .review-item {
+    padding: 12px 14px;
+    border-radius: 10px;
+    margin-bottom: 8px;
+    font-size: 0.88rem;
+    line-height: 1.5;
+  }
+
+  .review-item.r-correct { background: #E6FFE6; border-left: 3px solid var(--green); }
+  .review-item.r-wrong { background: #FFF0F0; border-left: 3px solid var(--red); }
+  .review-item strong { display: block; font-size: 0.82rem; margin-bottom: 2px; opacity: 0.7; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>✏️ Tenses Practice Quiz</h1>
+  <p>Primary 4 · Present Simple, Past Simple, Present Continuous</p>
+  <div class="progress-bar">
+    <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+  </div>
+  <div class="progress-text" id="progress-text">Question 1 of 10</div>
+</header>
+
+<div id="quiz-area"></div>
+<div id="results"></div>
+
+<script>
+const questions = [
+  // Q1 - MC
+  {
+    type: 'mc',
+    text: 'She _____ to school every day.',
+    options: ['go', 'goes', 'going', 'went'],
+    answer: 1,
+    explanation: '✅ He/She/It → verb + s. "She goes" is correct!'
+  },
+  // Q2 - Fill in blank
+  {
+    type: 'fill',
+    text: 'They _____ football in the park yesterday. (play)',
+    answer: 'played',
+    explanation: '✅ Yesterday = Past Simple. play + ed = played'
+  },
+  // Q3 - True/False
+  {
+    type: 'tf',
+    text: 'Is this sentence correct?\n\n"I am eat my lunch right now."',
+    answer: false,
+    explanation: '❌ Wrong! Present Continuous needs -ing. ✅ "I am eating my lunch right now."'
+  },
+  // Q4 - MC
+  {
+    type: 'mc',
+    text: 'Look! The dog _____ in the garden.',
+    options: ['run', 'runs', 'is running', 'ran'],
+    answer: 2,
+    explanation: '✅ "Look!" = happening right now = Present Continuous. "is running" is correct!'
+  },
+  // Q5 - Rearrange
+  {
+    type: 'order',
+    text: 'Rearrange these words to make a correct sentence:',
+    words: ['last', 'She', 'ate', 'night', 'pizza'],
+    answer: 'She ate pizza last night',
+    explanation: '✅ "She ate pizza last night." — Past Simple because of "last night"'
+  },
+  // Q6 - Fill in blank
+  {
+    type: 'fill',
+    text: 'He _____ not like vegetables. (does/do)',
+    answer: 'does',
+    explanation: '✅ He/She/It → does not. "He does not like" is correct!'
+  },
+  // Q7 - True/False
+  {
+    type: 'tf',
+    text: 'Is this sentence correct?\n\n"We went to the zoo last Sunday."',
+    answer: true,
+    explanation: '✅ Correct! "last Sunday" = Past Simple. "went" is the past form of "go".'
+  },
+  // Q8 - MC
+  {
+    type: 'mc',
+    text: 'My father _____ to work every morning.',
+    options: ['drive', 'drives', 'is driving', 'drove'],
+    answer: 1,
+    explanation: '✅ "Every morning" = habit = Present Simple. He/She/It → drives!'
+  },
+  // Q9 - Rearrange
+  {
+    type: 'order',
+    text: 'Rearrange these words to make a correct sentence:',
+    words: ['now', 'are', 'We', 'TV', 'watching'],
+    answer: 'We are watching TV now',
+    explanation: '✅ "We are watching TV now." — "now" = Present Continuous'
+  },
+  // Q10 - Fill in blank
+  {
+    type: 'fill',
+    text: 'Ali _____ his homework at the moment. (do)',
+    answer: 'is doing',
+    explanation: '✅ "At the moment" = Present Continuous. He → is doing!'
+  },
+];
+
+let current = 0;
+let score = 0;
+let results = [];
+let orderAnswer = [];
+let orderWords = [];
+
+function renderQuestion() {
+  const q = questions[current];
+  const pct = (current / questions.length) * 100;
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-text').textContent = `Question ${current + 1} of ${questions.length}`;
+
+  const area = document.getElementById('quiz-area');
+  area.innerHTML = '';
+
+  const card = document.createElement('div');
+  card.className = 'q-card active';
+  card.innerHTML = buildQuestion(q);
+  area.appendChild(card);
+
+  if (q.type === 'order') {
+    orderAnswer = [];
+    orderWords = [...q.words];
+    renderOrderChips();
+  }
+}
+
+function buildQuestion(q) {
+  const badges = { mc: 'badge-mc', fill: 'badge-fill', tf: 'badge-tf', order: 'badge-order' };
+  const labels = { mc: '🔵 Multiple Choice', fill: '✏️ Fill in the Blank', tf: '✅ True or False', order: '🔀 Rearrange' };
+
+  let body = `
+    <div class="q-type-badge ${badges[q.type]}">${labels[q.type]}</div>
+    <div class="q-number">Question ${current + 1}</div>
+    <div class="q-text">${q.text.replace(/\n/g, '<br>')}</div>
+  `;
+
+  if (q.type === 'mc') {
+    body += `<div class="options">`;
+    const labels2 = ['A', 'B', 'C', 'D'];
+    q.options.forEach((opt, i) => {
+      body += `<button class="option-btn" onclick="submitMC(${i})">
+        <span class="opt-label">${labels2[i]}</span> ${opt}
+      </button>`;
+    });
+    body += `</div>`;
+  } else if (q.type === 'fill') {
+    body += `<input class="fill-input" id="fill-input" type="text" placeholder="Type your answer here..." autocomplete="off">
+    <button class="submit-btn" onclick="submitFill()">Check Answer ✓</button>`;
+  } else if (q.type === 'tf') {
+    body += `<div class="tf-options">
+      <button class="tf-btn" onclick="submitTF(true)">✅ True</button>
+      <button class="tf-btn" onclick="submitTF(false)">❌ False</button>
+    </div>`;
+  } else if (q.type === 'order') {
+    body += `
+      <div class="area-label">Your Answer — tap to remove</div>
+      <div class="answer-area" id="answer-area"></div>
+      <div class="area-label">Word Bank — tap to add</div>
+      <div class="word-bank" id="word-bank"></div>
+      <button class="submit-btn" id="order-submit" onclick="submitOrder()" disabled>Check Answer ✓</button>
+    `;
+  }
+
+  body += `<div class="feedback" id="feedback"></div>
+  <button class="next-btn" id="next-btn" onclick="nextQuestion()">${current < questions.length - 1 ? 'Next Question →' : 'See Results 🎉'}</button>`;
+
+  return body;
+}
+
+function showFeedback(correct, explanation) {
+  const fb = document.getElementById('feedback');
+  fb.className = 'feedback ' + (correct ? 'correct' : 'wrong');
+  fb.innerHTML = (correct ? '🎉 ' : '💡 ') + explanation;
+  document.getElementById('next-btn').style.display = 'block';
+  results.push({ q: questions[current], correct });
+  if (correct) score++;
+}
+
+function submitMC(idx) {
+  const q = questions[current];
+  const btns = document.querySelectorAll('.option-btn');
+  btns.forEach(b => b.disabled = true);
+  const correct = idx === q.answer;
+  btns[idx].classList.add(correct ? 'correct' : 'wrong');
+  if (!correct) btns[q.answer].classList.add('show-correct');
+  showFeedback(correct, q.explanation);
+}
+
+function submitFill() {
+  const q = questions[current];
+  const input = document.getElementById('fill-input');
+  const val = input.value.trim().toLowerCase();
+  const correct = val === q.answer.toLowerCase();
+  input.classList.add(correct ? 'correct' : 'wrong');
+  input.disabled = true;
+  document.querySelector('.submit-btn').disabled = true;
+  if (!correct) {
+    input.value = input.value + ' → ✅ ' + q.answer;
+  }
+  showFeedback(correct, q.explanation);
+}
+
+function submitTF(val) {
+  const q = questions[current];
+  const btns = document.querySelectorAll('.tf-btn');
+  btns.forEach(b => b.disabled = true);
+  const correct = val === q.answer;
+  btns[val ? 0 : 1].classList.add(correct ? 'correct' : 'wrong');
+  if (!correct) btns[q.answer ? 0 : 1].classList.add('correct');
+  showFeedback(correct, q.explanation);
+}
+
+function renderOrderChips() {
+  const wb = document.getElementById('word-bank');
+  const aa = document.getElementById('answer-area');
+  if (!wb || !aa) return;
+
+  wb.innerHTML = orderWords.map((w, i) => {
+    const used = !orderAnswer.includes(null) && orderAnswer.some((x, j) => x === i);
+    return `<span class="word-chip ${used ? 'used' : ''}" onclick="addWord(${i})" id="chip-${i}">${w}</span>`;
+  }).join('');
+
+  aa.innerHTML = orderAnswer.map((i, pos) =>
+    `<span class="answer-chip" onclick="removeWord(${pos})">${orderWords[i]}</span>`
+  ).join('') || '<span style="color:#ccc;font-size:0.85rem;padding:4px">Tap words below to build your sentence...</span>';
+
+  const submit = document.getElementById('order-submit');
+  if (submit) submit.disabled = orderAnswer.length === 0;
+}
+
+function addWord(idx) {
+  if (document.getElementById('chip-' + idx).classList.contains('used')) return;
+  orderAnswer.push(idx);
+  renderOrderChips();
+}
+
+function removeWord(pos) {
+  orderAnswer.splice(pos, 1);
+  renderOrderChips();
+}
+
+function submitOrder() {
+  const q = questions[current];
+  const userAnswer = orderAnswer.map(i => orderWords[i]).join(' ');
+  const correct = userAnswer.toLowerCase() === q.answer.toLowerCase();
+
+  const aa = document.getElementById('answer-area');
+  aa.classList.add(correct ? 'correct-area' : 'wrong-area');
+
+  document.querySelectorAll('.word-chip').forEach(c => c.onclick = null);
+  document.querySelectorAll('.answer-chip').forEach(c => c.onclick = null);
+  document.getElementById('order-submit').disabled = true;
+
+  if (!correct) {
+    aa.innerHTML += `<div style="width:100%;font-size:0.82rem;color:#c0392b;margin-top:6px">✅ Correct: ${q.answer}</div>`;
+  }
+
+  showFeedback(correct, q.explanation);
+}
+
+function nextQuestion() {
+  current++;
+  if (current >= questions.length) {
+    showResults();
+  } else {
+    renderQuestion();
+  }
+}
+
+function showResults() {
+  document.getElementById('quiz-area').style.display = 'none';
+  const res = document.getElementById('results');
+  res.style.display = 'block';
+
+  const pct = Math.round((score / questions.length) * 100);
+  let emoji, msg, sub, color;
+
+  if (pct >= 90) { emoji = '🏆'; msg = 'Excellent! Outstanding!'; sub = 'You are a Tenses Master! 🌟'; color = '#27A843'; }
+  else if (pct >= 70) { emoji = '🎉'; msg = 'Great job!'; sub = 'Almost there — keep practising!'; color = '#2176AE'; }
+  else if (pct >= 50) { emoji = '💪'; msg = 'Good effort!'; sub = 'Review the notes and try again!'; color = '#FF8C00'; }
+  else { emoji = '📖'; msg = 'Keep going!'; sub = 'Read the notes again and you will improve!'; color = '#E83535'; }
+
+  document.getElementById('progress-fill').style.width = '100%';
+  document.getElementById('progress-text').textContent = 'Quiz Complete!';
+
+  let reviewHTML = '<div class="review-list">';
+  results.forEach((r, i) => {
+    reviewHTML += `<div class="review-item ${r.correct ? 'r-correct' : 'r-wrong'}">
+      <strong>Q${i+1} — ${r.correct ? '✅ Correct' : '❌ Incorrect'}</strong>
+      ${r.q.text.replace(/\n/g, ' ')}
+    </div>`;
+  });
+  reviewHTML += '</div>';
+
+  res.innerHTML = `
+    <div class="score-circle" style="background:${color}20;border:4px solid ${color}">
+      <div class="score-num" style="color:${color}">${score}</div>
+      <div class="score-label" style="color:${color}">/ ${questions.length}</div>
+    </div>
+    <div class="result-msg">${emoji} ${msg}</div>
+    <div class="result-sub">${pct}% correct. ${sub}</div>
+    <button class="retry-btn" onclick="restartQuiz()">🔄 Try Again</button>
+    ${reviewHTML}
+  `;
+}
+
+function restartQuiz() {
+  current = 0; score = 0; results = [];
+  document.getElementById('quiz-area').style.display = 'block';
+  document.getElementById('results').style.display = 'none';
+  renderQuestion();
+}
+
+renderQuestion();
+</script>
+</body>
+</html>
