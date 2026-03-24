@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Human Breathing – Primary 4 Science</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f0f7ff;
+    --card: #ffffff;
+    --navy: #1a3557;
+    --blue: #3a7bd5;
+    --sky: #6db8f7;
+    --teal: #3dbfa0;
+    --red: #e05c5c;
+    --orange: #f5883a;
+    --yellow: #f5c842;
+    --green: #52b96b;
+    --purple: #8b6fcb;
+    --border: #d1e3f5;
+    --shadow: 0 4px 20px rgba(26,53,87,0.1);
+    --light-blue: #e8f3fd;
+    --light-red: #fdeaea;
+    --light-green: #eaf9ee;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--navy); min-height: 100vh; }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #1a3557 0%, #2563a8 55%, #3a7bd5 100%);
+    color: white;
+    padding: 44px 20px 36px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -2px; left: 0; right: 0;
+    height: 40px;
+    background: var(--bg);
+    clip-path: ellipse(55% 100% at 50% 100%);
+  }
+  .hero-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 100px;
+    padding: 5px 18px;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .hero h1 { font-family: 'Fredoka One', cursive; font-size: clamp(2rem, 6vw, 3rem); line-height: 1.1; margin-bottom: 8px; }
+  .hero p { font-size: 14px; opacity: 0.8; max-width: 500px; margin: 0 auto 20px; }
+  .hero-chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+  .hero-chip {
+    background: rgba(255,255,255,0.2);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 100px;
+    padding: 4px 14px;
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  /* NAV */
+  .nav {
+    display: flex;
+    justify-content: center;
+    background: white;
+    border-bottom: 2px solid var(--border);
+    position: sticky; top: 0; z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    overflow-x: auto;
+  }
+  .tab-btn {
+    padding: 13px 18px;
+    border: none; background: transparent;
+    font-family: 'Nunito', sans-serif;
+    font-size: 13px; font-weight: 800;
+    color: #aaa; cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .tab-btn.active { color: var(--blue); border-bottom-color: var(--blue); }
+  .tab-btn:hover:not(.active) { color: var(--navy); background: var(--light-blue); }
+
+  /* CONTENT */
+  .section { display: none; }
+  .section.active { display: block; }
+  .content { max-width: 840px; margin: 0 auto; padding: 28px 14px; }
+
+  /* CARDS */
+  .card {
+    background: var(--card);
+    border: 1.5px solid var(--border);
+    border-radius: 18px;
+    padding: 24px;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow);
+    animation: fadeUp 0.35s ease both;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .card-hd {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 16px;
+  }
+  .card-icon {
+    width: 42px; height: 42px; border-radius: 13px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; flex-shrink: 0;
+  }
+  .card-title { font-family: 'Fredoka One', cursive; font-size: 1.2rem; }
+
+  /* FLOW DIAGRAM */
+  .flow {
+    display: flex; align-items: center; flex-wrap: wrap;
+    gap: 6px; margin: 10px 0;
+  }
+  .flow-box {
+    padding: 8px 16px; border-radius: 10px;
+    font-weight: 800; font-size: 14px;
+    border: 2px solid; display: flex; align-items: center; gap: 6px;
+  }
+  .flow-arrow {
+    font-size: 20px; font-weight: 800; color: #aaa;
+  }
+
+  /* COMPARE TABLE */
+  .compare {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 14px; margin: 12px 0;
+  }
+  .compare-box {
+    border-radius: 14px; padding: 18px; border: 2px solid;
+  }
+  .compare-box h3 {
+    font-family: 'Fredoka One', cursive; font-size: 1rem;
+    margin-bottom: 10px; display: flex; align-items: center; gap: 6px;
+  }
+  .compare-box ul { padding-left: 18px; font-size: 13.5px; line-height: 2; }
+
+  /* TABLE */
+  table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 12px 0; }
+  th { background: var(--navy); color: white; padding: 10px 14px; text-align: left; font-family: 'Fredoka One', cursive; }
+  th:first-child { border-radius: 10px 0 0 0; }
+  th:last-child { border-radius: 0 10px 0 0; }
+  td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+  tr:last-child td { border-bottom: none; }
+  tr:nth-child(even) td { background: #f0f7ff; }
+
+  /* HIGHLIGHT */
+  .hl {
+    border-radius: 12px; padding: 14px 18px;
+    margin: 10px 0; font-size: 14px; border-left: 4px solid;
+    line-height: 1.7;
+  }
+
+  /* TAGS */
+  .tag {
+    display: inline-block; border-radius: 100px;
+    padding: 3px 12px; font-size: 12px; font-weight: 800;
+    margin: 3px 3px 3px 0;
+  }
+
+  /* ====== QUIZ ====== */
+  .quiz-progress { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
+  .progress-bar { flex: 1; height: 10px; background: var(--border); border-radius: 100px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--teal), var(--blue)); border-radius: 100px; transition: width 0.4s ease; }
+  .progress-text { font-size: 13px; font-weight: 800; color: #aaa; white-space: nowrap; }
+
+  .qcard {
+    background: white; border: 2px solid var(--border);
+    border-radius: 18px; padding: 28px;
+    box-shadow: var(--shadow);
+    animation: fadeUp 0.3s ease;
+  }
+  .q-type-badge {
+    display: inline-block; font-size: 10px; font-weight: 800;
+    letter-spacing: 1px; text-transform: uppercase;
+    border-radius: 100px; padding: 3px 12px; margin-bottom: 8px;
+  }
+  .q-text { font-size: 16px; font-weight: 700; line-height: 1.55; margin-bottom: 20px; color: var(--navy); }
+
+  /* MCQ */
+  .options { display: flex; flex-direction: column; gap: 9px; }
+  .opt-btn {
+    background: #f5f9ff; border: 2px solid var(--border);
+    border-radius: 12px; padding: 12px 16px;
+    text-align: left; font-family: 'Nunito', sans-serif;
+    font-size: 14px; font-weight: 600; cursor: pointer;
+    transition: all 0.2s; color: var(--navy);
+  }
+  .opt-btn:hover:not(:disabled) { border-color: var(--blue); background: var(--light-blue); transform: translateX(4px); }
+  .opt-btn.correct { border-color: var(--green); background: var(--light-green); color: #1a6b30; font-weight: 800; }
+  .opt-btn.wrong { border-color: var(--red); background: var(--light-red); color: #a31515; }
+  .opt-btn:disabled { cursor: default; }
+
+  /* FILL IN THE BLANK */
+  .fill-sentence {
+    font-size: 15px; font-weight: 600; line-height: 2.2;
+    margin-bottom: 16px; color: var(--navy);
+  }
+  .blank-input {
+    display: inline-block;
+    border: none; border-bottom: 2.5px solid var(--blue);
+    background: transparent; font-family: 'Nunito', sans-serif;
+    font-size: 15px; font-weight: 700;
+    color: var(--navy); width: 120px; text-align: center;
+    padding: 2px 4px; outline: none;
+    transition: border-color 0.2s;
+  }
+  .blank-input:focus { border-bottom-color: var(--orange); }
+  .blank-input.correct-input { border-bottom-color: var(--green); color: var(--green); }
+  .blank-input.wrong-input { border-bottom-color: var(--red); color: var(--red); }
+  .blank-check-btn {
+    display: inline-block; margin-left: 8px;
+    padding: 6px 16px; border-radius: 100px;
+    border: none; background: var(--blue); color: white;
+    font-family: 'Nunito', sans-serif; font-weight: 800;
+    font-size: 13px; cursor: pointer; transition: all 0.2s;
+  }
+  .blank-check-btn:hover { background: var(--navy); }
+  .blank-result {
+    font-size: 13px; font-weight: 700; margin-top: 8px;
+    min-height: 20px; transition: all 0.2s;
+  }
+
+  /* FEEDBACK */
+  .feedback {
+    margin-top: 14px; padding: 12px 16px;
+    border-radius: 11px; font-size: 14px; font-weight: 600;
+    display: none; animation: fadeUp 0.25s ease;
+  }
+  .feedback.show { display: block; }
+  .feedback.correct-fb { background: var(--light-green); border: 1.5px solid var(--green); color: #1a6b30; }
+  .feedback.wrong-fb { background: var(--light-red); border: 1.5px solid var(--red); color: #a31515; }
+
+  /* BUTTONS */
+  .btn {
+    padding: 11px 26px; border-radius: 100px; border: none;
+    font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 14px;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .btn-primary { background: var(--blue); color: white; }
+  .btn-primary:hover { background: var(--navy); transform: translateY(-1px); }
+  .btn-secondary { background: white; color: var(--navy); border: 2px solid var(--border); }
+  .btn-secondary:hover { border-color: var(--blue); color: var(--blue); }
+
+  .quiz-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; gap: 10px; }
+
+  /* SCORE */
+  .score-card {
+    text-align: center; padding: 40px 24px;
+    background: white; border-radius: 20px;
+    border: 2px solid var(--border); box-shadow: var(--shadow);
+  }
+  .score-emoji { font-size: 60px; margin-bottom: 10px; }
+  .score-num { font-family: 'Fredoka One', cursive; font-size: 3.5rem; color: var(--blue); }
+  .score-label { font-size: 15px; color: #999; margin-bottom: 18px; }
+  .score-msg { font-size: 17px; font-weight: 700; margin-bottom: 24px; }
+
+  /* SECTION TITLE */
+  .sec-title {
+    font-family: 'Fredoka One', cursive; font-size: 1.5rem;
+    color: var(--navy); margin-bottom: 20px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .sec-title::after {
+    content: ''; flex: 1; height: 2px; background: var(--border);
+  }
+
+  @media(max-width:560px) {
+    .compare { grid-template-columns: 1fr; }
+    .tab-btn { font-size: 12px; padding: 12px 10px; }
+    .qcard { padding: 20px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">📚 Primary 4 · Science · Unit 2.1</div>
+  <h1>🫁 Human Breathing</h1>
+  <p>Organs, Inhalation & Exhalation, Gas Exchange, Rate of Breathing</p>
+  <div class="hero-chips">
+    <span class="hero-chip">Nose → Trachea → Lungs</span>
+    <span class="hero-chip">O₂ in · CO₂ out</span>
+    <span class="hero-chip">Chest Movement</span>
+    <span class="hero-chip">Rate of Breathing</span>
+  </div>
+</div>
+
+<!-- NAV -->
+<div class="nav">
+  <button class="tab-btn active" onclick="showTab('notes', this)">📖 Notes</button>
+  <button class="tab-btn" onclick="showTab('compare', this)">🔄 Inhalation vs Exhalation</button>
+  <button class="tab-btn" onclick="showTab('mcq', this)">✏️ MCQ Quiz</button>
+  <button class="tab-btn" onclick="showTab('fill', this)">🖊️ Fill in the Blanks</button>
+</div>
+
+<!-- =================== NOTES =================== -->
+<div id="notes" class="section active">
+<div class="content">
+
+  <!-- Organs -->
+  <div class="card" style="animation-delay:0.05s">
+    <div class="card-hd">
+      <div class="card-icon" style="background:#e8f3fd; color:#3a7bd5;">🫁</div>
+      <div class="card-title" style="color:#3a7bd5;">Organs Involved in Breathing</div>
+    </div>
+    <ul style="padding-left:20px; font-size:14px; line-height:2.2;">
+      <li>The <strong>lungs</strong> are the main organs involved in human breathing.</li>
+      <li>Air passes through the <strong>nose → trachea → lungs</strong>.</li>
+      <li>The <strong>trachea</strong> connects the nose to both the left and right lungs.</li>
+      <li>The <strong>left lung</strong> is <em>smaller</em> than the right lung because the heart is on the left side.</li>
+    </ul>
+
+    <div style="margin-top:16px; font-weight:800; font-size:13px; margin-bottom:8px;">Air Pathway (Flow Chart)</div>
+    <div class="flow" style="margin-bottom:10px;">
+      <div style="font-size:12px; font-weight:800; color:#3a7bd5; margin-right:4px;">INHALATION :</div>
+      <div class="flow-box" style="background:#e8f3fd; border-color:#3a7bd5; color:#3a7bd5;">👃 Nose</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-box" style="background:#e8f3fd; border-color:#3a7bd5; color:#3a7bd5;">🔵 Trachea</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-box" style="background:#e8f3fd; border-color:#3a7bd5; color:#3a7bd5;">🫁 Lungs</div>
+    </div>
+    <div class="flow">
+      <div style="font-size:12px; font-weight:800; color:#e05c5c; margin-right:4px;">EXHALATION :</div>
+      <div class="flow-box" style="background:#fdeaea; border-color:#e05c5c; color:#e05c5c;">🫁 Lungs</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-box" style="background:#fdeaea; border-color:#e05c5c; color:#e05c5c;">🔴 Trachea</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-box" style="background:#fdeaea; border-color:#e05c5c; color:#e05c5c;">👃 Nose</div>
+    </div>
+  </div>
+
+  <!-- Gas Exchange -->
+  <div class="card" style="animation-delay:0.1s">
+    <div class="card-hd">
+      <div class="card-icon" style="background:#eaf9ee; color:#52b96b;">⚗️</div>
+      <div class="card-title" style="color:#52b96b;">Gas Exchange in the Lungs</div>
+    </div>
+    <div style="display:flex; flex-wrap:wrap; gap:14px; margin-bottom:14px;">
+      <div style="flex:1; min-width:200px; background:#e8f3fd; border-radius:14px; padding:16px; border:2px solid #b0d4f5;">
+        <div style="font-weight:800; color:#3a7bd5; font-size:14px; margin-bottom:8px;">🔵 OXYGEN (O₂)</div>
+        <div style="font-size:13px; line-height:1.8;">
+          ✅ <strong>Carried INTO the lungs</strong><br>
+          → Inhaled air has <strong>MORE oxygen</strong>
+        </div>
+      </div>
+      <div style="flex:1; min-width:200px; background:#fdeaea; border-radius:14px; padding:16px; border:2px solid #f5aaa0;">
+        <div style="font-weight:800; color:#e05c5c; font-size:14px; margin-bottom:8px;">🔴 CARBON DIOXIDE (CO₂)</div>
+        <div style="font-size:13px; line-height:1.8;">
+          ✅ <strong>Carried OUT of the lungs</strong><br>
+          → Exhaled air has <strong>MORE carbon dioxide</strong>
+        </div>
+      </div>
+    </div>
+    <div class="hl" style="background:#fffbe6; border-color:#f5c842;">
+      🌍 <strong>Surrounding air contains:</strong> Oxygen · Carbon dioxide · Nitrogen · Other gases · Water vapour
+    </div>
+  </div>
+
+  <!-- Chest Movement -->
+  <div class="card" style="animation-delay:0.15s">
+    <div class="card-hd">
+      <div class="card-icon" style="background:#f3eef9; color:#8b6fcb;">💨</div>
+      <div class="card-title" style="color:#8b6fcb;">Chest Movement During Breathing</div>
+    </div>
+    <table>
+      <tr>
+        <th>Process</th>
+        <th>Chest Movement</th>
+        <th>Air Direction</th>
+        <th>Main Gas</th>
+      </tr>
+      <tr>
+        <td>🔵 <strong>Inhalation</strong></td>
+        <td>⬆️ Moves <strong>upwards</strong> &amp; expands</td>
+        <td>Air <strong>enters</strong> the lungs</td>
+        <td>More <strong>Oxygen (O₂)</strong></td>
+      </tr>
+      <tr>
+        <td>🔴 <strong>Exhalation</strong></td>
+        <td>⬇️ Moves <strong>downwards</strong> &amp; contracts</td>
+        <td>Air <strong>exits</strong> the lungs</td>
+        <td>More <strong>CO₂</strong></td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- Rate of Breathing -->
+  <div class="card" style="animation-delay:0.2s">
+    <div class="card-hd">
+      <div class="card-icon" style="background:#fff5e6; color:#f5883a;">📊</div>
+      <div class="card-title" style="color:#f5883a;">Rate of Breathing</div>
+    </div>
+    <div class="hl" style="background:#fff5e6; border-color:#f5883a;">
+      <strong>Rate of breathing</strong> = Number of upward AND downward chest movements in <strong>one minute</strong>.<br>
+      It depends on the type of activity being done.
+    </div>
+    <br>
+    <table>
+      <tr>
+        <th>Rate</th>
+        <th>Examples of Activities</th>
+      </tr>
+      <tr>
+        <td>🟢 <strong>Low Rate</strong></td>
+        <td>Watching TV, sleeping, studying, reading</td>
+      </tr>
+      <tr>
+        <td>🟡 <strong>Moderate Rate</strong></td>
+        <td>Walking slowly, climbing stairs, walking fast</td>
+      </tr>
+      <tr>
+        <td>🔴 <strong>High Rate</strong></td>
+        <td>Running, cycling, swimming, jumping jacks</td>
+      </tr>
+    </table>
+    <div class="hl" style="background:#eaf9ee; border-color:#52b96b; margin-top:12px;">
+      📌 <strong>Conclusion:</strong> The more vigorous (active) the activity, the <strong>higher</strong> the breathing rate.
+    </div>
+  </div>
+
+  <!-- Haze + Healthy Lungs -->
+  <div class="card" style="animation-delay:0.25s">
+    <div class="card-hd">
+      <div class="card-icon" style="background:#fdeaea; color:#e05c5c;">🌫️</div>
+      <div class="card-title" style="color:#e05c5c;">Situations That Affect Breathing</div>
+    </div>
+    <div class="hl" style="background:#fdeaea; border-color:#e05c5c;">
+      <strong>Haze</strong> = Dry air containing various gases, dust, and floating particles in the atmosphere. It causes low visibility and is unhealthy for humans.
+    </div>
+    <br>
+    <div style="font-weight:800; font-size:13px; margin-bottom:10px;">Bad for Breathing:</div>
+    <div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px;">
+      <span class="tag" style="background:#fdeaea; color:#e05c5c;">🔥 Open burning / haze</span>
+      <span class="tag" style="background:#fdeaea; color:#e05c5c;">🚬 Smoking</span>
+      <span class="tag" style="background:#fdeaea; color:#e05c5c;">👥 Crowded places</span>
+    </div>
+    <div style="font-weight:800; font-size:13px; margin-bottom:10px;">Good for Breathing:</div>
+    <div style="display:flex; flex-wrap:wrap; gap:8px;">
+      <span class="tag" style="background:#eaf9ee; color:#52b96b;">🌳 Clean environment / parks</span>
+      <span class="tag" style="background:#eaf9ee; color:#52b96b;">🏃 Regular exercise</span>
+      <span class="tag" style="background:#eaf9ee; color:#52b96b;">🚭 Not smoking</span>
+    </div>
+    <br>
+    <div style="font-weight:800; font-size:13px; margin-bottom:8px;">🚬 Effects of Smoking on Lungs:</div>
+    <ul style="padding-left:20px; font-size:13.5px; line-height:2;">
+      <li>Lungs become <strong>black</strong> because of chemicals in cigarettes</li>
+      <li>Lungs get damaged → can lead to <strong>lung cancer</strong></li>
+      <li>Smokers have <strong>trouble breathing normally</strong></li>
+    </ul>
+  </div>
+
+</div>
+</div>
+
+<!-- =================== COMPARE TAB =================== -->
+<div id="compare" class="section">
+<div class="content">
+
+  <div class="sec-title">🔄 Inhalation vs Exhalation</div>
+
+  <div class="card">
+    <div class="compare">
+      <div class="compare-box" style="border-color:#3a7bd5; background:#e8f3fd;">
+        <h3 style="color:#3a7bd5;">🔵 Inhalation (Breathing IN)</h3>
+        <ul>
+          <li>Air taken <strong>INTO</strong> the lungs</li>
+          <li>Path: <strong>Nose → Trachea → Lungs</strong></li>
+          <li>Chest moves <strong>UPWARDS</strong></li>
+          <li>Lungs <strong>expand</strong></li>
+          <li>Air <strong>enters</strong> the lungs</li>
+          <li>Inhaled air: <strong>MORE oxygen</strong></li>
+          <li>Inhaled air: <strong>LESS carbon dioxide</strong></li>
+        </ul>
+      </div>
+      <div class="compare-box" style="border-color:#e05c5c; background:#fdeaea;">
+        <h3 style="color:#e05c5c;">🔴 Exhalation (Breathing OUT)</h3>
+        <ul>
+          <li>Air expelled <strong>FROM</strong> the lungs</li>
+          <li>Path: <strong>Lungs → Trachea → Nose</strong></li>
+          <li>Chest moves <strong>DOWNWARDS</strong></li>
+          <li>Lungs <strong>contract</strong></li>
+          <li>Air <strong>exits</strong> the lungs</li>
+          <li>Exhaled air: <strong>MORE carbon dioxide</strong></li>
+          <li>Exhaled air: <strong>LESS oxygen</strong></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-hd">
+      <div class="card-icon" style="background:#e8f3fd; color:#3a7bd5;">📋</div>
+      <div class="card-title">Summary Table</div>
+    </div>
+    <table>
+      <tr><th>Feature</th><th>🔵 Inhalation</th><th>🔴 Exhalation</th></tr>
+      <tr><td>Air movement</td><td>Air taken <strong>in</strong></td><td>Air expelled <strong>out</strong></td></tr>
+      <tr><td>Air pathway</td><td>Nose → Trachea → Lungs</td><td>Lungs → Trachea → Nose</td></tr>
+      <tr><td>Chest movement</td><td>Moves <strong>upwards</strong></td><td>Moves <strong>downwards</strong></td></tr>
+      <tr><td>Lung size</td><td><strong>Expands</strong> (bigger)</td><td><strong>Contracts</strong> (smaller)</td></tr>
+      <tr><td>Oxygen (O₂)</td><td><strong>More</strong> oxygen</td><td><strong>Less</strong> oxygen</td></tr>
+      <tr><td>Carbon dioxide (CO₂)</td><td><strong>Less</strong> CO₂</td><td><strong>More</strong> CO₂</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-hd">
+      <div class="card-icon" style="background:#fffbe6; color:#f5c842;">💡</div>
+      <div class="card-title" style="color:#c9a200;">Key Facts to Remember</div>
+    </div>
+    <ul style="padding-left:20px; font-size:14px; line-height:2.3;">
+      <li>Exchange of gases takes place in the <strong>lungs</strong>.</li>
+      <li><strong>Oxygen enters</strong> the lungs; <strong>carbon dioxide leaves</strong> the lungs.</li>
+      <li>The left lung is <strong>smaller</strong> than the right — the heart is on the left side.</li>
+      <li>Air can also enter the lungs through the <strong>mouth</strong> (not just the nose).</li>
+      <li>Breathing is the process of <strong>inhaling AND exhaling</strong>.</li>
+    </ul>
+  </div>
+
+</div>
+</div>
+
+<!-- =================== MCQ QUIZ =================== -->
+<div id="mcq" class="section">
+<div class="content">
+  <div id="mcq-container"></div>
+  <div id="mcq-score" style="display:none;"></div>
+</div>
+</div>
+
+<!-- =================== FILL IN THE BLANKS =================== -->
+<div id="fill" class="section">
+<div class="content">
+  <div class="sec-title">🖊️ Fill in the Blanks</div>
+  <div id="fill-container"></div>
+  <div id="fill-score" style="display:none;"></div>
+</div>
+</div>
+
+<script>
+// ===== TAB =====
+function showTab(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ===== MCQ DATA =====
+const mcqQ = [
+  {
+    q: "What is the correct air pathway during INHALATION?",
+    opts: ["Lungs → Trachea → Nose", "Nose → Trachea → Lungs", "Trachea → Nose → Lungs", "Lungs → Nose → Trachea"],
+    ans: 1,
+    exp: "During inhalation, air flows: Nose → Trachea → Lungs."
+  },
+  {
+    q: "What is the correct air pathway during EXHALATION?",
+    opts: ["Nose → Trachea → Lungs", "Lungs → Nose → Trachea", "Lungs → Trachea → Nose", "Trachea → Lungs → Nose"],
+    ans: 2,
+    exp: "During exhalation, air flows: Lungs → Trachea → Nose."
+  },
+  {
+    q: "During inhalation, the chest moves _______.",
+    opts: ["Downwards and contracts", "Upwards and expands", "Side to side", "It does not move"],
+    ans: 1,
+    exp: "During inhalation, the chest moves UPWARDS and the lungs expand to allow air in."
+  },
+  {
+    q: "During exhalation, the chest moves _______.",
+    opts: ["Upwards and expands", "Side to side", "Downwards and contracts", "It stays the same"],
+    ans: 2,
+    exp: "During exhalation, the chest moves DOWNWARDS and the lungs contract to push air out."
+  },
+  {
+    q: "Inhaled air contains _______ compared to exhaled air.",
+    opts: ["More carbon dioxide", "More oxygen", "Less oxygen", "More nitrogen only"],
+    ans: 1,
+    exp: "Inhaled air contains MORE oxygen. We breathe in oxygen-rich air and breathe out carbon dioxide."
+  },
+  {
+    q: "Exhaled air contains _______ compared to inhaled air.",
+    opts: ["More oxygen", "Less carbon dioxide", "More carbon dioxide", "No gases at all"],
+    ans: 2,
+    exp: "Exhaled air contains MORE carbon dioxide. Gas exchange in the lungs releases CO₂."
+  },
+  {
+    q: "Where does the exchange of gases (O₂ and CO₂) take place?",
+    opts: ["Nose", "Trachea", "Lungs", "Mouth"],
+    ans: 2,
+    exp: "Gas exchange takes place in the LUNGS. Oxygen enters the lungs and carbon dioxide leaves."
+  },
+  {
+    q: "Why is the LEFT lung smaller than the RIGHT lung?",
+    opts: ["The right lung works harder", "The heart is located on the left side", "The nose is on the left", "The trachea is on the right"],
+    ans: 1,
+    exp: "The left lung is smaller because the HEART is located on the left side, taking up space."
+  },
+  {
+    q: "The RATE OF BREATHING is defined as:",
+    opts: ["How fast your heart beats per minute", "Number of upward and downward chest movements in one minute", "How much oxygen you breathe in per hour", "The size of your lungs"],
+    ans: 1,
+    exp: "Rate of breathing = number of upward AND downward chest movements in one minute."
+  },
+  {
+    q: "Which activity has a LOW rate of breathing?",
+    opts: ["Swimming", "Running", "Watching television", "Cycling"],
+    ans: 2,
+    exp: "Watching television is a resting activity, so the breathing rate is LOW."
+  },
+  {
+    q: "Which activity has a HIGH rate of breathing?",
+    opts: ["Sleeping", "Studying", "Slow walking", "Swimming"],
+    ans: 3,
+    exp: "Swimming is vigorous exercise — it causes a HIGH breathing rate."
+  },
+  {
+    q: "What does HAZE consist of?",
+    opts: ["Clean air only", "Dry air with gases, dust and floating particles", "Water vapour and oxygen only", "Only carbon dioxide"],
+    ans: 1,
+    exp: "Haze is dry air containing various gases, dust and floating particles — it is unhealthy to breathe."
+  },
+  {
+    q: "Surrounding air contains which of the following gases? (Choose ALL that apply — pick the most complete answer)",
+    opts: ["Oxygen only", "Oxygen and carbon dioxide only", "Oxygen, carbon dioxide, nitrogen, other gases and water vapour", "Nitrogen and water vapour only"],
+    ans: 2,
+    exp: "Surrounding air contains oxygen, carbon dioxide, nitrogen, other gases AND water vapour."
+  },
+  {
+    q: "What happens to a smoker's lungs over time?",
+    opts: ["They become pink and healthier", "They become black due to chemicals in cigarettes", "They grow bigger", "They produce more oxygen"],
+    ans: 1,
+    exp: "Chemicals in cigarettes cause a smoker's lungs to turn BLACK. This damages the lungs and can lead to lung cancer."
+  },
+  {
+    q: "Air can enter the lungs through which organ(s)?",
+    opts: ["Nose only", "Mouth only", "Both nose and mouth", "Skin"],
+    ans: 2,
+    exp: "Air can enter the lungs through the NOSE or the MOUTH (mainly the nose, but also the mouth)."
+  },
+  {
+    q: "During the breathing experiment (book on chest), what happens to the book when you INHALE?",
+    opts: ["The book moves DOWN", "The book moves UP", "The book stays still", "The book falls off"],
+    ans: 1,
+    exp: "When you inhale, your chest moves UPWARDS — so a book placed on your chest also moves UP."
+  },
+  {
+    q: "In an experiment about breathing rate, a pupil does 3 activities: standing (20 chest movements), walking (39), and swimming (53). What is the pattern?",
+    opts: ["The rate decreases with more activity", "The rate stays the same", "The rate increases with more vigorous activity", "Rate depends on lung size only"],
+    ans: 2,
+    exp: "The more vigorous the activity, the HIGHER the breathing rate. Standing < Walking < Swimming."
+  },
+  {
+    q: "What is the main organ involved in BREATHING?",
+    opts: ["Heart", "Kidneys", "Lungs", "Stomach"],
+    ans: 2,
+    exp: "The LUNGS are the main organs involved in human breathing."
+  },
+  {
+    q: "Which is NOT a component of surrounding air?",
+    opts: ["Oxygen", "Carbon dioxide", "Nitrogen", "Soil particles"],
+    ans: 3,
+    exp: "Surrounding air contains oxygen, CO₂, nitrogen, other gases and water vapour. Soil particles are NOT part of normal air."
+  },
+  {
+    q: "What conclusion can be made about activities and breathing rate?",
+    opts: ["All activities have the same breathing rate", "Resting activities cause a higher breathing rate", "More vigorous activities cause a higher breathing rate", "Sleeping has the highest breathing rate"],
+    ans: 2,
+    exp: "CONCLUSION: The more vigorous (active) the activity, the higher the breathing rate."
+  }
+];
+
+let mcqCurrent = 0, mcqScore = 0, mcqAnswered = false;
+
+function renderMCQ() {
+  if (mcqCurrent >= mcqQ.length) { showMCQScore(); return; }
+  const q = mcqQ[mcqCurrent];
+  const pct = Math.round((mcqCurrent / mcqQ.length) * 100);
+  document.getElementById('mcq-container').innerHTML = `
+    <div class="quiz-progress">
+      <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+      <div class="progress-text">${mcqCurrent + 1} / ${mcqQ.length}</div>
+    </div>
+    <div class="qcard">
+      <span class="q-type-badge" style="background:#e8f3fd; color:#3a7bd5;">Multiple Choice</span>
+      <div class="q-text">${q.q}</div>
+      <div class="options">
+        ${q.opts.map((o,i) => `<button class="opt-btn" onclick="pickMCQ(${i})">${String.fromCharCode(65+i)}. ${o}</button>`).join('')}
+      </div>
+      <div id="mcq-fb" class="feedback"></div>
+      <div class="quiz-nav">
+        <div style="font-size:13px; color:#bbb;">Score: ${mcqScore} / ${mcqCurrent}</div>
+        <button class="btn btn-primary" id="mcq-next" onclick="nextMCQ()" style="display:none;">
+          ${mcqCurrent === mcqQ.length-1 ? '🏁 See Results' : 'Next →'}
+        </button>
+      </div>
+    </div>`;
+  mcqAnswered = false;
+}
+
+function pickMCQ(idx) {
+  if (mcqAnswered) return;
+  mcqAnswered = true;
+  const q = mcqQ[mcqCurrent];
+  const btns = document.querySelectorAll('.opt-btn');
+  btns.forEach(b => b.disabled = true);
+  btns[idx].classList.add(idx === q.ans ? 'correct' : 'wrong');
+  if (idx !== q.ans) btns[q.ans].classList.add('correct');
+  const fb = document.getElementById('mcq-fb');
+  if (idx === q.ans) {
+    mcqScore++;
+    fb.textContent = '✅ Correct! ' + q.exp;
+    fb.className = 'feedback show correct-fb';
+  } else {
+    fb.textContent = '❌ Not quite. ' + q.exp;
+    fb.className = 'feedback show wrong-fb';
+  }
+  document.getElementById('mcq-next').style.display = 'inline-block';
+}
+
+function nextMCQ() { mcqCurrent++; renderMCQ(); }
+
+function showMCQScore() {
+  document.getElementById('mcq-container').style.display = 'none';
+  const pct = Math.round((mcqScore / mcqQ.length) * 100);
+  let e='😊', m='Good effort! Review the notes and try again.';
+  if (pct>=90) {e='🎉'; m='Outstanding! You really know your Human Breathing!';}
+  else if (pct>=75) {e='😄'; m='Great job! Almost perfect!';}
+  else if (pct>=50) {e='🙂'; m='Not bad! Review a few topics and try again.';}
+  document.getElementById('mcq-score').innerHTML = `
+    <div class="score-card">
+      <div class="score-emoji">${e}</div>
+      <div class="score-num">${mcqScore} / ${mcqQ.length}</div>
+      <div class="score-label">${pct}% correct</div>
+      <div class="score-msg">${m}</div>
+      <button class="btn btn-primary" onclick="restartMCQ()">🔄 Try Again</button>
+    </div>`;
+  document.getElementById('mcq-score').style.display = 'block';
+}
+function restartMCQ() {
+  mcqCurrent=0; mcqScore=0; mcqAnswered=false;
+  document.getElementById('mcq-container').style.display='block';
+  document.getElementById('mcq-score').style.display='none';
+  renderMCQ();
+}
+
+// ===== FILL IN THE BLANKS =====
+const fillQ = [
+  {
+    sentence: "During inhalation, air is taken into the [1]. During exhalation, air is [2] from the lungs.",
+    blanks: ["lungs", "expelled"],
+    hints: ["(organ)", "(pushed out)"]
+  },
+  {
+    sentence: "The air pathway during inhalation is: [1] → Trachea → [2].",
+    blanks: ["nose", "lungs"],
+    hints: ["(first organ)", "(last organ)"]
+  },
+  {
+    sentence: "The air pathway during exhalation is: Lungs → [1] → [2].",
+    blanks: ["trachea", "nose"],
+    hints: ["(tube)", "(exit organ)"]
+  },
+  {
+    sentence: "During inhalation, the chest moves [1] and the lungs [2].",
+    blanks: ["upwards", "expand"],
+    hints: ["(direction)", "(get bigger/smaller?)"]
+  },
+  {
+    sentence: "During exhalation, the chest moves [1] and the lungs [2].",
+    blanks: ["downwards", "contract"],
+    hints: ["(direction)", "(get bigger/smaller?)"]
+  },
+  {
+    sentence: "Inhaled air contains [1] oxygen compared to exhaled air. Exhaled air contains [2] carbon dioxide.",
+    blanks: ["more", "more"],
+    hints: ["(more/less)", "(more/less)"]
+  },
+  {
+    sentence: "Exchange of gases takes place in the [1]. Oxygen [2] the lungs while carbon dioxide leaves the lungs.",
+    blanks: ["lungs", "enters"],
+    hints: ["(organ)", "(enters/exits)"]
+  },
+  {
+    sentence: "The size of the left lung is [1] compared to the right lung because the [2] is located on the left side.",
+    blanks: ["smaller", "heart"],
+    hints: ["(bigger/smaller)", "(organ)"]
+  },
+  {
+    sentence: "The rate of breathing is the number of [1] and downward chest movements in one [2].",
+    blanks: ["upward", "minute"],
+    hints: ["(direction)", "(time unit)"]
+  },
+  {
+    sentence: "Watching television gives a [1] rate of breathing. Swimming gives a [2] rate of breathing.",
+    blanks: ["low", "high"],
+    hints: ["(low/moderate/high)", "(low/moderate/high)"]
+  },
+  {
+    sentence: "Haze is [1] air containing various gases, dust and [2] particles.",
+    blanks: ["dry", "floating"],
+    hints: ["(wet/dry)", "(type of particles)"]
+  },
+  {
+    sentence: "Surrounding air contains oxygen, carbon dioxide, [1], other gases and water [2].",
+    blanks: ["nitrogen", "vapour"],
+    hints: ["(a gas)", "(water _____)"]
+  },
+  {
+    sentence: "A smoker's lungs will become [1] because of the [2] inside the cigarettes.",
+    blanks: ["black", "chemicals"],
+    hints: ["(colour)", "(what is in cigarettes)"]
+  }
+];
+
+let fillScores = [];
+
+function renderFill() {
+  fillScores = new Array(fillQ.length).fill(null);
+  let html = '';
+  fillQ.forEach((fq, qi) => {
+    // Build sentence with input fields
+    let sentHtml = fq.sentence;
+    fq.blanks.forEach((ans, bi) => {
+      const placeholder = fq.hints[bi];
+      sentHtml = sentHtml.replace(
+        `[${bi+1}]`,
+        `<input class="blank-input" id="fill-${qi}-${bi}" type="text" placeholder="${placeholder}" autocomplete="off" />`
+      );
+    });
+    html += `
+      <div class="card" style="animation-delay:${qi*0.04}s">
+        <div style="font-size:11px; font-weight:800; letter-spacing:1px; text-transform:uppercase; color:#8b6fcb; margin-bottom:10px;">Fill in the Blank ${qi+1}</div>
+        <div class="fill-sentence">${sentHtml}</div>
+        <button class="btn btn-primary" style="font-size:13px; padding:9px 20px;" onclick="checkFill(${qi})">Check ✓</button>
+        <div id="fill-result-${qi}" class="blank-result"></div>
+      </div>`;
+  });
+  html += `<div style="text-align:center; margin: 10px 0 20px;">
+    <button class="btn btn-primary" onclick="checkAllFill()">📊 Check All & See Score</button>
+  </div>`;
+  document.getElementById('fill-container').innerHTML = html;
+}
+
+function normAnswer(s) {
+  return s.trim().toLowerCase().replace(/[^a-z]/g, '');
+}
+
+function checkFill(qi) {
+  const fq = fillQ[qi];
+  let allCorrect = true;
+  let resultMsg = '';
+  fq.blanks.forEach((ans, bi) => {
+    const inp = document.getElementById(`fill-${qi}-${bi}`);
+    const userVal = inp.value;
+    const correct = normAnswer(ans);
+    const user = normAnswer(userVal);
+    if (user === correct) {
+      inp.classList.add('correct-input');
+      inp.classList.remove('wrong-input');
+    } else {
+      allCorrect = false;
+      inp.classList.add('wrong-input');
+      inp.classList.remove('correct-input');
+      resultMsg += `Blank ${bi+1}: Answer is "<strong>${ans}</strong>". `;
+    }
+  });
+  const res = document.getElementById(`fill-result-${qi}`);
+  if (allCorrect) {
+    fillScores[qi] = true;
+    res.innerHTML = '✅ Perfect!';
+    res.style.color = 'var(--green)';
+  } else {
+    fillScores[qi] = false;
+    res.innerHTML = '❌ ' + resultMsg;
+    res.style.color = 'var(--red)';
+  }
+}
+
+function checkAllFill() {
+  fillQ.forEach((_, qi) => checkFill(qi));
+  const correct = fillScores.filter(s => s === true).length;
+  const total = fillQ.length;
+  const pct = Math.round((correct / total) * 100);
+  let e='😊', m='Keep practising!';
+  if (pct>=90){e='🎉'; m='Excellent! You know this topic really well!';}
+  else if (pct>=75){e='😄'; m='Great work! Almost there!';}
+  else if (pct>=50){e='🙂'; m='Good try! Review the notes and retry.';}
+  document.getElementById('fill-score').innerHTML = `
+    <div class="score-card">
+      <div class="score-emoji">${e}</div>
+      <div class="score-num">${correct} / ${total}</div>
+      <div class="score-label">${pct}% correct</div>
+      <div class="score-msg">${m}</div>
+      <button class="btn btn-primary" onclick="restartFill()">🔄 Try Again</button>
+    </div>`;
+  document.getElementById('fill-score').style.display = 'block';
+  document.getElementById('fill-score').scrollIntoView({ behavior: 'smooth' });
+}
+
+function restartFill() {
+  document.getElementById('fill-score').style.display = 'none';
+  renderFill();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// INIT
+renderMCQ();
+renderFill();
+</script>
+</body>
+</html>
