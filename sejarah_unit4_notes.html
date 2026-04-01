@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sejarah Unit 4 – Tempat Tinggal</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: #f5f0e8;
+    padding: 20px;
+    font-size: 20px;
+    line-height: 1.7;
+    color: #1a1a1a;
+  }
+
+  .page-title {
+    text-align: center;
+    background: linear-gradient(135deg, #e63946, #ff8c00);
+    color: white;
+    padding: 22px 16px;
+    border-radius: 20px;
+    margin-bottom: 28px;
+    box-shadow: 0 6px 20px rgba(230,57,70,0.25);
+  }
+  .page-title h1 {
+    font-size: 28px;
+    font-weight: 900;
+  }
+  .page-title p {
+    font-size: 18px;
+    opacity: 0.9;
+    margin-top: 4px;
+  }
+
+  /* SECTION */
+  .section {
+    background: white;
+    border-radius: 18px;
+    padding: 24px 20px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  }
+  .section-title {
+    font-size: 22px;
+    font-weight: 900;
+    margin-bottom: 18px;
+    padding-bottom: 10px;
+    border-bottom: 3px solid;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  /* CITY COLORS */
+  .jb .section-title   { color: #1da1f2; border-color: #1da1f2; }
+  .miri .section-title { color: #e63946; border-color: #e63946; }
+  .ranau .section-title{ color: #2dc653; border-color: #2dc653; }
+  .vocab .section-title{ color: #9b5de5; border-color: #9b5de5; }
+  .sentences .section-title { color: #ff8c00; border-color: #ff8c00; }
+
+  /* TABLE */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  td {
+    padding: 13px 14px;
+    border-bottom: 1px solid #f0f0f0;
+    vertical-align: top;
+    font-size: 19px;
+  }
+  td:first-child {
+    font-weight: 800;
+    width: 42%;
+    color: #333;
+  }
+  td:last-child {
+    color: #555;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:nth-child(even) td { background: #fafafa; }
+
+  /* HIGHLIGHT */
+  .hl {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 8px;
+    font-weight: 800;
+  }
+  .hl-blue   { background: #e6f4ff; color: #1da1f2; }
+  .hl-red    { background: #ffeeee; color: #e63946; }
+  .hl-green  { background: #e8f8ee; color: #2dc653; }
+  .hl-purple { background: #f0e6ff; color: #9b5de5; }
+  .hl-orange { background: #fff3e0; color: #ff8c00; }
+
+  /* SENTENCE CARDS */
+  .sentence-card {
+    background: #fff8f0;
+    border-left: 5px solid #ff8c00;
+    border-radius: 12px;
+    padding: 16px 18px;
+    margin-bottom: 14px;
+  }
+  .sentence-card .num {
+    font-size: 13px;
+    font-weight: 900;
+    color: #ff8c00;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+  .sentence-card .ms {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 6px;
+  }
+  .sentence-card .zh {
+    font-size: 18px;
+    color: #888;
+  }
+  .sentence-card .answer {
+    display: inline-block;
+    background: #ff8c00;
+    color: white;
+    padding: 2px 12px;
+    border-radius: 8px;
+    font-weight: 900;
+    font-size: 18px;
+  }
+
+  /* VOCAB */
+  .vocab-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 13px 0;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  .vocab-item:last-child { border-bottom: none; }
+  .vocab-ms {
+    font-size: 20px;
+    font-weight: 800;
+    color: #1a1a1a;
+    min-width: 200px;
+  }
+  .vocab-zh {
+    font-size: 19px;
+    color: #666;
+  }
+
+  @media (max-width: 480px) {
+    body { padding: 14px; font-size: 18px; }
+    .page-title h1 { font-size: 24px; }
+    td { font-size: 17px; padding: 11px 10px; }
+    td:first-child { width: 45%; }
+    .vocab-ms { min-width: 160px; font-size: 18px; }
+    .vocab-zh { font-size: 17px; }
+    .sentence-card .ms { font-size: 18px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-title">
+  <h1>📚 Sejarah Tahun 4</h1>
+  <p>Unit 4 · Sejarah Tempat Tinggal · 居住地的历史</p>
+</div>
+
+<!-- JOHOR BAHRU -->
+<div class="section jb">
+  <div class="section-title">🏙️ Johor Bahru <span style="font-size:16px;font-weight:700;color:#aaa">新山</span></div>
+  <table>
+    <tr>
+      <td>Nama asal<br><span style="font-size:15px;color:#aaa">原名</span></td>
+      <td><span class="hl hl-blue">Tanjung Puteri</span><br>丹绒布德里</td>
+    </tr>
+    <tr>
+      <td>Diasaskan oleh<br><span style="font-size:15px;color:#aaa">创立者</span></td>
+      <td><span class="hl hl-blue">Temenggong Daeng Ibrahim</span><br>丹绒达因依布拉欣，于 <strong>1855</strong> 年</td>
+    </tr>
+    <tr>
+      <td>Tukar nama<br><span style="font-size:15px;color:#aaa">改名</span></td>
+      <td><span class="hl hl-blue">Sultan Abu Bakar</span> tukar kepada <strong>Johor Bahru</strong> pada <strong>1866</strong><br>苏丹阿布峇卡于1866年改名为新山</td>
+    </tr>
+    <tr>
+      <td>Bentuk muka bumi<br><span style="font-size:15px;color:#aaa">地形</span></td>
+      <td>Pinggir laut dan tanah pamah<br>海岸及平地</td>
+    </tr>
+    <tr>
+      <td>Keistimewaan<br><span style="font-size:15px;color:#aaa">特色</span></td>
+      <td>Tambak Johor 长堤<br>Pelabuhan Tanjung Pelepas 丹绒柏勒巴斯港口</td>
+    </tr>
+  </table>
+</div>
+
+<!-- MIRI -->
+<div class="section miri">
+  <div class="section-title">🌊 Miri <span style="font-size:16px;font-weight:700;color:#aaa">美里</span></div>
+  <table>
+    <tr>
+      <td>Pernah dikuasai<br><span style="font-size:15px;color:#aaa">曾被统治</span></td>
+      <td><span class="hl hl-red">Kesultanan Brunei</span> dan keluarga Brooke<br>汶莱苏丹国及布洛克家族</td>
+    </tr>
+    <tr>
+      <td>Berkembang<br><span style="font-size:15px;color:#aaa">发展</span></td>
+      <td>Industri <span class="hl hl-red">petroleum</span> sejak <strong>1910</strong><br>自1910年起因石油工业而发展</td>
+    </tr>
+    <tr>
+      <td>Diiktiraf<br><span style="font-size:15px;color:#aaa">获封</span></td>
+      <td>Bandar raya pada <strong>2005</strong><br>2005年被封为城市</td>
+    </tr>
+    <tr>
+      <td>Keistimewaan<br><span style="font-size:15px;color:#aaa">特色</span></td>
+      <td><span class="hl hl-red">Gua Niah</span> – tinggalan zaman prasejarah<br>尼亚石洞 – 史前时代遗迹</td>
+    </tr>
+  </table>
+</div>
+
+<!-- RANAU -->
+<div class="section ranau">
+  <div class="section-title">🏔️ Ranau <span style="font-size:16px;font-weight:700;color:#aaa">拉瑙</span></div>
+  <table>
+    <tr>
+      <td>Asal nama<br><span style="font-size:15px;color:#aaa">名字由来</span></td>
+      <td>Daripada perkataan <span class="hl hl-green">"Ranahon"</span><br>源自"Ranahon"，意思是稻田地区</td>
+    </tr>
+    <tr>
+      <td>Sejarah<br><span style="font-size:15px;color:#aaa">历史</span></td>
+      <td>Kubu pertahanan <span class="hl hl-green">Mat Salleh</span> menentang British<br>曾是马萨里抵抗英国的防御据点</td>
+    </tr>
+    <tr>
+      <td>Bentuk muka bumi<br><span style="font-size:15px;color:#aaa">地形</span></td>
+      <td>Tanah tinggi dan sungai<br>高地及河流</td>
+    </tr>
+    <tr>
+      <td>Keistimewaan<br><span style="font-size:15px;color:#aaa">特色</span></td>
+      <td><span class="hl hl-green">Kolam Air Panas Poring</span> 泡林温泉<br><span class="hl hl-green">Taman Negara Kinabalu</span> – UNESCO 2000<br>神山国家公园 – 2000年列入UNESCO世界遗产</td>
+    </tr>
+  </table>
+</div>
+
+<!-- SENTENCES PAGE 31 -->
+<div class="section sentences">
+  <div class="section-title">📝 Halaman 31 <span style="font-size:16px;font-weight:700;color:#aaa">第31页答案</span></div>
+  <p style="font-size:17px;color:#aaa;margin-bottom:16px;">Kepentingan Menjaga Kemudahan Awam · 维护公共设施的重要性</p>
+
+  <div class="sentence-card">
+    <div class="num">Bulatan 1</div>
+    <div class="ms">Pelbagai golongan masyarakat akan mendapat <span class="answer">manfaat</span></div>
+    <div class="zh">各阶层的社区居民都会得到<strong>好处</strong></div>
+  </div>
+
+  <div class="sentence-card">
+    <div class="num">Bulatan 2</div>
+    <div class="ms">Memudahkan urusan setiap golongan <span class="answer">masyarakat</span></div>
+    <div class="zh">方便各阶层<strong>社区居民</strong>办理事务</div>
+  </div>
+
+  <div class="sentence-card">
+    <div class="num">Bulatan 3</div>
+    <div class="ms">Mengurangkan kos baik pulih daripada pihak <span class="answer">kerajaan</span></div>
+    <div class="zh">减少<strong>政府</strong>的维修费用</div>
+  </div>
+
+  <div class="sentence-card">
+    <div class="num">Bulatan 4</div>
+    <div class="ms">Memupuk sikap saling berkongsi dan <span class="answer">toleransi</span></div>
+    <div class="zh">培养互相分享和<strong>包容</strong>的态度</div>
+  </div>
+
+  <div class="sentence-card">
+    <div class="num">Bulatan 5</div>
+    <div class="ms">Menghargai <span class="answer">inisiatif</span> kerajaan</div>
+    <div class="zh">感激政府的<strong>主动性</strong></div>
+  </div>
+</div>
+
+<!-- VOCAB -->
+<div class="section vocab">
+  <div class="section-title">🔤 生字表 <span style="font-size:16px;font-weight:700;color:#aaa">Senarai Kosa Kata</span></div>
+
+  <div class="vocab-item">
+    <div class="vocab-ms">kemudahan awam</div>
+    <div class="vocab-zh">公共设施</div>
+  </div>
+  <div class="vocab-item">
+    <div class="vocab-ms">masyarakat</div>
+    <div class="vocab-zh">社会 / 社区</div>
+  </div>
+  <div class="vocab-item">
+    <div class="vocab-ms">inisiatif</div>
+    <div class="vocab-zh">主动性 / 倡议</div>
+  </div>
+  <div class="vocab-item">
+    <div class="vocab-ms">kerajaan</div>
+    <div class="vocab-zh">政府</div>
+  </div>
+  <div class="vocab-item">
+    <div class="vocab-ms">toleransi</div>
+    <div class="vocab-zh">包容 / 宽容</div>
+  </div>
+  <div class="vocab-item">
+    <div class="vocab-ms">manfaat</div>
+    <div class="vocab-zh">好处 / 利益</div>
+  </div>
+  <div class="vocab-item">
+    <div class="vocab-ms">memupuk</div>
+    <div class="vocab-zh">培养 / 培育</div>
+  </div>
+  <div class="vocab-item">
+    <div class="vocab-ms">sikap saling berkongsi</div>
+    <div class="vocab-zh">互相分享的态度</div>
+  </div>
+  <div class="vocab-item">
+    <div class="vocab-ms">mengurangkan</div>
+    <div class="vocab-zh">减少</div>
+  </div>
+  <div class="vocab-item">
+    <div class="vocab-ms">kos baik pulih</div>
+    <div class="vocab-zh">维修费用</div>
+  </div>
+  <div class="vocab-item">
+    <div class="vocab-ms">memudahkan</div>
+    <div class="vocab-zh">方便 / 便利</div>
+  </div>
+  <div class="vocab-item">
+    <div class="vocab-ms">urusan</div>
+    <div class="vocab-zh">事务 / 手续</div>
+  </div>
+  <div class="vocab-item">
+    <div class="vocab-ms">golongan</div>
+    <div class="vocab-zh">群体 / 阶层</div>
+  </div>
+  <div class="vocab-item">
+    <div class="vocab-ms">menghargai</div>
+    <div class="vocab-zh">感激 / 珍惜</div>
+  </div>
+  <div class="vocab-item">
+    <div class="vocab-ms">kepentingan</div>
+    <div class="vocab-zh">重要性</div>
+  </div>
+  <div class="vocab-item">
+    <div class="vocab-ms">menjaga</div>
+    <div class="vocab-zh">维护 / 照顾</div>
+  </div>
+</div>
+
+</body>
+</html>
